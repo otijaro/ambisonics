@@ -1,4 +1,4 @@
-# ambisonics
+# Ambisonics
 Proyecto ambisonics - Música - Electrónica
 
 **Trabajo de grado**:
