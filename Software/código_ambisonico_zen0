@@ -1,4 +1,4 @@
-#Código ambisónico con componente z sin variar, z es una matriz de ceros
+#Código conversión estéreo a ambisónico con componente z sin variar, z es una matriz de ceros
 # INSTALACIÓN
 # =========================================================
 !pip install soundfile scipy pysofaconventions
