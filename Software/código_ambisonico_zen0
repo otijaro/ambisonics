@@ -1,11 +1,10 @@
-# =========================================================
+#Código ambisónico con componente z sin variar, z es una matriz de ceros
 # INSTALACIÓN
 # =========================================================
 !pip install soundfile scipy pysofaconventions
 !apt-get install ffmpeg -y
 !apt-get install curl -y
 
-# =========================================================
 # IMPORTS
 # =========================================================
 import numpy as np
