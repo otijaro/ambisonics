@@ -148,7 +148,7 @@ foa = np.stack([W, Y, Z, X], axis=1)
 foa /= np.max(np.abs(foa)) + 1e-9
 
 # =========================================================
-# 🔍 VALIDACIÓN AMBISONICS (FOA)
+# VALIDACIÓN AMBISONICS (FOA)
 # =========================================================
 print("\n===== VALIDACIÓN FOA =====")
 
@@ -158,7 +158,7 @@ print("Número de canales:", foa.shape[1])
 if foa.shape[1] == 4:
     print("✔ FOA válido (4 canales: W, Y, Z, X)")
 else:
-    print("❌ No es FOA correcto")
+    print("No es FOA correcto")
 
 print("\nDuración (samples):", foa.shape[0])
 print("Sample rate:", sr)
@@ -228,4 +228,4 @@ sf.write("output_binaural.wav", binaural, sr)
 files.download("output_foa.wav")
 files.download("output_binaural.wav")
 
-print("✔ FUNCIONANDO CORRECTAMENTE")
+print("FUNCIONANDO CORRECTAMENTE")
