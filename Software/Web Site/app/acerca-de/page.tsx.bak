@@ -1,0 +1,114 @@
+import type { Metadata } from 'next'
+import { GraduationCap, Users, UserCog, Building2, Lightbulb, Cog, Rocket, FlaskConical } from 'lucide-react'
+import { Reveal } from '@/components/reveal'
+
+export const metadata: Metadata = {
+  title: 'Acerca de — Ambisonic',
+  description: 'Conoce el proyecto Ambisonic, su trayectoria y el equipo detrás de la Universidad Industrial de Santander.',
+}
+
+const timeline = [
+  { icon: Lightbulb, title: 'Idea y concepto', text: 'El proyecto nace con el propósito de acercar el audio espacial a cualquier persona mediante una plataforma sencilla, intuitiva y accesible, permitiendo transformar grabaciones estéreo en experiencias de sonido envolvente.' },
+  { icon: FlaskConical, title: 'Investigación', text: 'Se estudiaron los fundamentos del audio espacial, los formatos Ambisonics y el procesamiento binaural para definir la arquitectura y el funcionamiento de la plataforma.' },
+  { icon: Cog, title: 'Desarrollo del motor', text: 'Se desarrolló el motor de procesamiento encargado de convertir audio estéreo y capturas multicanal en experiencias de audio espacial listas para su reproducción.' },
+  { icon: Rocket, title: 'Plataforma web', text: 'Finalmente, se desarrolló una plataforma web interactiva que integra la conversión de audio, la visualización 3D y las herramientas necesarias para explorar el audio espacial de una forma sencilla e intuitiva.' },
+]
+
+const autores = ['Sharon Catalina Vargas Cortes', 'Anwar Andrés Cuello Pabón']
+
+export default function AcercaPage() {
+  return (
+    <div className="bg-aurora">
+      <section className="mx-auto max-w-5xl px-4 pt-28 pb-16 sm:px-6 sm:pt-32 lg:px-8">
+        <div className="max-w-2xl">
+          <span className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/60 px-3 py-1 text-xs text-muted-foreground">
+            Acerca del proyecto
+          </span>
+          <h1 className="mt-5 text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
+            El proyecto Ambisonic
+          </h1>
+          <p className="mt-4 text-pretty text-lg leading-relaxed text-muted-foreground">
+            Un proyecto universitario que transforma el audio estéreo en experiencias espaciales inmersivas,
+            haciendo accesible una tecnología antes reservada a estudios profesionales.
+          </p>
+        </div>
+
+        {/* Timeline */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-semibold tracking-tight">Trayectoria</h2>
+          <div className="relative mt-8 space-y-8 before:absolute before:left-[19px] before:top-2 before:h-[calc(100%-1rem)] before:w-px before:bg-border">
+            {timeline.map((item, i) => (
+              <Reveal key={item.title} delay={i * 0.08}>
+                <div className="relative flex gap-5">
+                  <span className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent text-primary ring-4 ring-background">
+                    <item.icon className="h-5 w-5" />
+                  </span>
+                  <div className="rounded-2xl glass p-5">
+                    <h3 className="font-semibold text-foreground">{item.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+
+        {/* Créditos */}
+        <Reveal className="mt-16">
+          <div className="rounded-3xl glass p-6 sm:p-8">
+            <h2 className="text-2xl font-semibold tracking-tight">Créditos</h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-border bg-secondary/50 p-5 sm:col-span-2">
+                <div className="flex items-center gap-2 text-primary">
+                  <Users className="h-5 w-5" />
+                  <span className="text-sm font-semibold text-foreground">Autores</span>
+                </div>
+                <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+                  {autores.map((a) => (
+                    <li key={a} className="text-sm text-muted-foreground">
+                      {a}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <CreditCard icon={UserCog} role="Director" name="Omar Javier Tíjaro Rojas" />
+              <CreditCard icon={UserCog} role="Codirector" name="Nicolás Esteban Hernández Bustos" />
+              
+              <div className="flex items-center gap-4 rounded-2xl border border-primary/25 bg-primary/10 p-5 sm:col-span-2">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+                  <Building2 className="h-6 w-6" />
+                </span>
+                <div>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <GraduationCap className="h-4 w-4" /> Institución
+                  </div>
+                  <p className="mt-0.5 font-semibold text-foreground">Universidad Industrial de Santander</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+    </div>
+  )
+}
+
+function CreditCard({
+  icon: Icon,
+  role,
+  name,
+}: {
+  icon: React.ComponentType<{ className?: string }>
+  role: string
+  name: string
+}) {
+  return (
+    <div className="rounded-2xl border border-border bg-secondary/50 p-5">
+      <div className="flex items-center gap-2 text-primary">
+        <Icon className="h-5 w-5" />
+        <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{role}</span>
+      </div>
+      <p className="mt-2 font-semibold text-foreground">{name}</p>
+    </div>
+  )
+}

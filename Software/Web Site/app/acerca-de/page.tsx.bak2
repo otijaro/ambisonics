@@ -1,0 +1,166 @@
+import type { Metadata } from 'next'
+import { GraduationCap, Users, UserCog, Building2, Lightbulb, Search, Cpu, Laptop, CheckCircle, Rocket } from 'lucide-react'
+import { Reveal } from '@/components/reveal'
+
+export const metadata: Metadata = {
+  title: 'Acerca de — Ambisonic',
+  description: 'Conoce el proyecto Ambisonic, su trayectoria y el equipo detrás de la Universidad Industrial de Santander.',
+}
+
+const timeline = [
+  { icon: Lightbulb, title: 'Idea y planteamiento', text: 'Se identificó la necesidad de acercar el audio espacial a usuarios no especializados mediante una solución accesible, intuitiva y sustentada en principios de Ingeniería Electrónica.' },
+  { icon: Search, title: 'Investigación', text: 'Se estudiaron los fundamentos del procesamiento digital de señales, la representación Ambisonics y la reproducción binaural necesarios para definir el funcionamiento del sistema.' },
+  { icon: Cpu, title: 'Desarrollo del motor DSP', text: 'Se diseñó e implementó un motor de procesamiento digital encargado de convertir audio estéreo y capturas multicanal en representaciones de audio espacial.' },
+  { icon: Laptop, title: 'Desarrollo de la plataforma', text: 'El motor DSP se integró en una plataforma web interactiva que permite configurar la conversión, visualizar el campo sonoro y gestionar los resultados generados.' },
+  { icon: CheckCircle, title: 'Validación', text: 'Se definieron pruebas funcionales, de rendimiento y de calidad para evaluar el comportamiento de la plataforma y la coherencia de sus resultados.' },
+  { icon: Rocket, title: 'Plataforma Ambisonic', text: 'Como resultado se obtuvo una plataforma profesional, nacida a partir de un proyecto de grado de Ingeniería Electrónica, que integra conversión, visualización y exploración de audio espacial en una experiencia accesible e interactiva.', highlight: true },
+]
+
+const autores = ['Sharon Catalina Vargas Cortes', 'Anwar Andrés Cuello Pabón']
+
+export default function AcercaPage() {
+  return (
+    <div className="bg-aurora">
+      <section className="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-24 lg:px-8">
+        <div className="mx-auto max-w-3xl text-center">
+          <Reveal>
+            <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-5xl">
+              El proyecto Ambisonic
+            </h1>
+            <p className="mt-6 text-pretty text-lg leading-relaxed text-muted-foreground">
+              Ambisonic es una plataforma profesional de audio espacial desarrollada desde la Ingeniería Electrónica. Nació a partir de un proyecto de grado y evolucionó mediante la integración de procesamiento digital de señales, desarrollo de software y visualización interactiva, con el propósito de acercar la conversión y exploración del audio espacial a usuarios no especializados.
+            </p>
+          </Reveal>
+        </div>
+
+        {/* Roadmap */}
+        <div className="mt-12 md:mt-16">
+          <h2 className="text-2xl font-semibold tracking-tight">Evolución del proyecto</h2>
+          <div className="relative mt-8 flex flex-col md:grid md:grid-cols-6 md:w-full md:mt-16 md:mb-16 gap-4 md:gap-0">
+            {/* Pista principal del roadmap */}
+            <div className="absolute left-[20px] top-0 h-full w-2 rounded-full bg-secondary/80 md:left-0 md:top-1/2 md:-translate-y-1/2 md:h-2 md:w-full overflow-hidden shadow-inner">
+              <div className="h-full w-full bg-gradient-to-b md:bg-gradient-to-r from-primary/10 via-primary/50 to-primary rounded-full"></div>
+            </div>
+            
+            {timeline.map((item, i) => {
+              const isTop = i % 2 === 0;
+              return (
+                <Reveal key={item.title} delay={i * 0.08} className="relative flex md:flex-col md:flex-1 w-full group">
+                  
+                  {/* Espacio Superior (Escritorio) - Tarjeta Arriba */}
+                  <div className={`hidden md:flex flex-col items-center justify-end h-[180px] lg:h-[200px] pb-2 ${isTop ? '' : 'invisible'}`}>
+                    <div className="w-[190px] lg:w-[220px] flex flex-col items-center relative z-20">
+                      <RoadmapCard item={item} />
+                      {/* Conector */}
+                      <div className="h-6 w-px bg-primary/20 transition-all duration-500 group-hover:bg-primary/60 group-hover:h-10 mt-2"></div>
+                    </div>
+                  </div>
+
+                  {/* Nodo en el roadmap */}
+                  <div className="relative flex w-12 justify-center items-center md:w-full z-10 py-2 md:py-0">
+                    <div className={`relative flex shrink-0 items-center justify-center rounded-full ring-4 ring-background transition-all duration-500 
+                      ${item.highlight 
+                        ? 'h-10 w-10 bg-primary text-primary-foreground shadow-[0_0_20px_rgba(var(--primary),0.6)]' 
+                        : 'h-6 w-6 bg-background border-2 border-primary text-primary group-hover:bg-primary group-hover:text-primary-foreground group-hover:scale-125 group-hover:shadow-[0_0_15px_rgba(var(--primary),0.4)]'
+                      }`}>
+                      <item.icon className={item.highlight ? "h-5 w-5" : "h-3 w-3"} />
+                    </div>
+                  </div>
+
+                  {/* Espacio Inferior (Escritorio) - Tarjeta Abajo */}
+                  <div className={`hidden md:flex flex-col items-center justify-start h-[180px] lg:h-[200px] pt-2 ${!isTop ? '' : 'invisible'}`}>
+                    <div className="w-[190px] lg:w-[220px] flex flex-col items-center relative z-20">
+                      {/* Conector */}
+                      <div className="h-6 w-px bg-primary/20 transition-all duration-500 group-hover:bg-primary/60 group-hover:h-10 mb-2"></div>
+                      <RoadmapCard item={item} />
+                    </div>
+                  </div>
+
+                  {/* Tarjeta - Mobile */}
+                  <div className="flex-1 md:hidden pl-2">
+                    <RoadmapCard item={item} />
+                  </div>
+
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Créditos */}
+        <Reveal className="mt-16">
+          <div className="rounded-3xl glass p-6 sm:p-8">
+            <h2 className="text-2xl font-semibold tracking-tight">Créditos</h2>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="rounded-2xl border border-border bg-secondary/50 p-5 sm:col-span-2">
+                <div className="flex items-center gap-2 text-primary">
+                  <Users className="h-5 w-5" />
+                  <span className="text-sm font-semibold text-foreground">Autores</span>
+                </div>
+                <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+                  {autores.map((a) => (
+                    <li key={a} className="text-sm font-bold text-foreground">
+                      {a}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <CreditCard icon={UserCog} role="Director" name="Omar Javier Tíjaro Rojas" />
+              <CreditCard icon={UserCog} role="Codirector" name="Nicolás Esteban Hernández Bustos" />
+              
+              <div className="flex items-center gap-4 rounded-2xl border border-primary/25 bg-primary/10 p-5 sm:col-span-2">
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+                  <Building2 className="h-6 w-6" />
+                </span>
+                <div>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <GraduationCap className="h-4 w-4" /> Institución
+                  </div>
+                  <p className="mt-0.5 font-semibold text-foreground">Universidad Industrial de Santander</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+    </div>
+  )
+}
+
+function CreditCard({
+  icon: Icon,
+  role,
+  name,
+}: {
+  icon: React.ComponentType<{ className?: string }>
+  role: string
+  name: string
+}) {
+  return (
+    <div className="rounded-2xl border border-border bg-secondary/50 p-5">
+      <div className="flex items-center gap-2 text-primary">
+        <Icon className="h-5 w-5" />
+        <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{role}</span>
+      </div>
+      <p className="mt-2 font-bold text-foreground">{name}</p>
+    </div>
+  )
+}
+
+function RoadmapCard({ item }: { item: any }) {
+  return (
+    <div className={`relative rounded-xl border p-4 transition-all duration-500 cursor-default bg-background/95 backdrop-blur-sm
+      group-hover:shadow-xl group-hover:shadow-primary/20 group-hover:-translate-y-1 group-hover:border-primary/50
+      ${item.highlight ? 'border-primary ring-1 ring-primary/30 shadow-[0_0_15px_rgba(var(--primary),0.1)]' : 'border-border/40'}
+    `}>
+      <h3 className="font-bold text-sm text-foreground flex items-center gap-2">
+        {item.title}
+      </h3>
+      
+      <p className="mt-2 text-xs leading-relaxed text-muted-foreground overflow-hidden max-h-[2.5rem] group-hover:max-h-[10rem] transition-[max-height,color] duration-500 ease-in-out group-hover:text-foreground/90">
+        {item.text}
+      </p>
+    </div>
+  )
+}
+
