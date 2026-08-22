@@ -1,7 +1,0 @@
-node_modules/
-.venv/
-.next/
-*.wav
-*.mp3
-backend/static/
-.git/
