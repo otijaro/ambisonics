@@ -1,0 +1,85 @@
+﻿Banco;Subcarpeta;Formato;Fs_Hz;Canales;Duracion_s;Correlacion_r;RMSE_global;SER_dB;Delta_RMS;Corr_Espectral;Cumple
+Banco estéreo de señales controladas;A01_impulso_center;FOA (Ambisonics B-Format);48000;4;2.0;0.75;0.0;87.6;0.0;0.75;NO
+Banco estéreo de señales controladas;A01_impulso_center;Binaural estándar;48000;2;2.01;1.0;0.0;121.95;0.0;1.0;SI
+Banco estéreo de señales controladas;A01_impulso_center;Binaural 3D Perceptual;48000;2;2.01;1.0;0.0;121.18;0.0;1.0;SI
+Banco estéreo de señales controladas;A02_tono_1kHz_center;FOA (Ambisonics B-Format);48000;4;10.0;0.75;0.0;75.35;0.0;0.75;NO
+Banco estéreo de señales controladas;A02_tono_1kHz_center;Binaural estándar;48000;2;10.01;1.0;0.0;117.94;0.0;1.0;SI
+Banco estéreo de señales controladas;A02_tono_1kHz_center;Binaural 3D Perceptual;48000;2;10.01;1.0;0.0;95.2;0.0;1.0;SI
+Banco estéreo de señales controladas;A02_tono_1kHz_left;FOA (Ambisonics B-Format);48000;4;10.0;1.0;0.0;89.56;0.0;1.0;SI
+Banco estéreo de señales controladas;A02_tono_1kHz_left;Binaural estándar;48000;2;10.01;1.0;0.0;103.47;0.0;1.0;SI
+Banco estéreo de señales controladas;A02_tono_1kHz_left;Binaural 3D Perceptual;48000;2;10.01;1.0;0.0;89.18;0.0;1.0;SI
+Banco estéreo de señales controladas;A02_tono_1kHz_right;FOA (Ambisonics B-Format);48000;4;10.0;1.0;0.0;89.56;0.0;1.0;SI
+Banco estéreo de señales controladas;A02_tono_1kHz_right;Binaural estándar;48000;2;10.01;1.0;0.0;95.72;0.0;1.0;SI
+Banco estéreo de señales controladas;A02_tono_1kHz_right;Binaural 3D Perceptual;48000;2;10.01;1.0;0.0;89.98;0.0;1.0;SI
+Banco estéreo de señales controladas;A03_ruido_blanco_30s;FOA (Ambisonics B-Format);48000;4;30.0;0.75;0.0;79.98;0.0;0.75;NO
+Banco estéreo de señales controladas;A03_ruido_blanco_30s;Binaural estándar;48000;2;30.01;1.0;0.0;108.27;0.0;1.0;SI
+Banco estéreo de señales controladas;A03_ruido_blanco_30s;Binaural 3D Perceptual;48000;2;30.01;1.0;0.0;106.21;0.0;1.0;SI
+Banco estéreo de señales controladas;A04_cancion_corta_30s;FOA (Ambisonics B-Format);44100;4;35.63;1.0;0.0;104.07;0.0;1.0;SI
+Banco estéreo de señales controladas;A04_cancion_corta_30s;Binaural estándar;44100;2;35.64;1.0;0.0;107.13;0.0;1.0;SI
+Banco estéreo de señales controladas;A04_cancion_corta_30s;Binaural 3D Perceptual;44100;2;35.64;1.0;0.0;104.85;0.0;1.0;SI
+Banco estéreo de señales controladas;A05_cancion_corta_1min;FOA (Ambisonics B-Format);44100;4;56.63;1.0;0.0;106.4;0.0;1.0;SI
+Banco estéreo de señales controladas;A05_cancion_corta_1min;Binaural estándar;44100;2;56.64;1.0;0.0;107.85;0.0;1.0;SI
+Banco estéreo de señales controladas;A05_cancion_corta_1min;Binaural 3D Perceptual;44100;2;56.64;1.0;0.0;105.9;0.0;1.0;SI
+Banco estéreo de señales controladas;A06_cancion_larga_5mins;FOA (Ambisonics B-Format);44100;4;281.38;0.9962;0.0032;44.8;0.0014;0.9963;SI
+Banco estéreo de señales controladas;A06_cancion_larga_5mins;Binaural estándar;44100;2;281.39;1.0;0.0007;43.69;0.0001;1.0;SI
+Banco estéreo de señales controladas;A06_cancion_larga_5mins;Binaural 3D Perceptual;44100;2;281.39;0.9987;0.0049;25.13;0.002;0.9989;SI
+Banco estéreo de señales controladas;A07_cancion_larga_10mins;FOA (Ambisonics B-Format);44100;4;578.11;0.9903;0.0064;43.13;0.0024;0.9904;SI
+Banco estéreo de señales controladas;A07_cancion_larga_10mins;Binaural estándar;44100;2;578.12;1.0;0.0008;43.01;0.0;1.0;SI
+Banco estéreo de señales controladas;A07_cancion_larga_10mins;Binaural 3D Perceptual;44100;2;578.12;0.9978;0.0061;23.16;0.0022;0.9982;SI
+Banco experimental de cuatro micrófonos;DIR BLD;FOA (Ambisonics B-Format);44100;4;12.5;1.0;0.0;108.8;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BLD;Binaural estándar;44100;2;12.51;1.0;0.0;107.33;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BLD;Binaural 3D Perceptual;44100;2;12.51;1.0;0.0;107.87;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BLU;FOA (Ambisonics B-Format);44100;4;11.35;1.0;0.0;109.11;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BLU;Binaural estándar;44100;2;11.36;1.0;0.0;106.36;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BLU;Binaural 3D Perceptual;44100;2;11.36;1.0;0.0;106.47;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BRD;FOA (Ambisonics B-Format);44100;4;11.1;1.0;0.0;110.87;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BRD;Binaural estándar;44100;2;11.11;1.0;0.0;107.46;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BRD;Binaural 3D Perceptual;44100;2;11.11;1.0;0.0;106.02;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BRU;FOA (Ambisonics B-Format);44100;4;10.29;1.0;0.0;112.15;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BRU;Binaural estándar;44100;2;10.3;1.0;0.0;106.58;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR BRU;Binaural 3D Perceptual;44100;2;10.3;1.0;0.0;107.64;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FLD;FOA (Ambisonics B-Format);44100;4;15.77;1.0;0.0;108.22;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FLD;Binaural estándar;44100;2;15.78;1.0;0.0;107.24;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FLD;Binaural 3D Perceptual;44100;2;15.78;1.0;0.0;108.05;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FLU;FOA (Ambisonics B-Format);44100;4;15.25;1.0;0.0;112.23;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FLU;Binaural estándar;44100;2;15.26;1.0;0.0;106.41;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FLU;Binaural 3D Perceptual;44100;2;15.26;1.0;0.0;106.26;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FRD;FOA (Ambisonics B-Format);44100;4;11.42;1.0;0.0;109.65;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FRD;Binaural estándar;44100;2;11.43;1.0;0.0;107.31;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FRD;Binaural 3D Perceptual;44100;2;11.43;1.0;0.0;107.97;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FRU;FOA (Ambisonics B-Format);44100;4;8.84;1.0;0.0;120.78;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FRU;Binaural estándar;44100;2;8.85;1.0;0.0;108.32;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;DIR FRU;Binaural 3D Perceptual;44100;2;8.85;1.0;0.0;107.17;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE +X;FOA (Ambisonics B-Format);44100;4;14.49;1.0;0.0;111.34;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE +X;Binaural estándar;44100;2;14.5;1.0;0.0;105.07;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE +X;Binaural 3D Perceptual;44100;2;14.5;1.0;0.0;105.21;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE +Y;FOA (Ambisonics B-Format);44100;4;21.13;1.0;0.0;116.39;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE +Y;Binaural estándar;44100;2;21.14;1.0;0.0;105.43;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE +Y;Binaural 3D Perceptual;44100;2;21.14;1.0;0.0;104.42;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE +Z;FOA (Ambisonics B-Format);44100;4;12.04;1.0;0.0;108.54;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE +Z;Binaural estándar;44100;2;12.05;1.0;0.0;102.09;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE +Z;Binaural 3D Perceptual;44100;2;12.05;1.0;0.0;98.21;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE -X;FOA (Ambisonics B-Format);44100;4;12.04;1.0;0.0;108.63;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE -X;Binaural estándar;44100;2;12.05;1.0;0.0;107.98;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE -X;Binaural 3D Perceptual;44100;2;12.05;1.0;0.0;106.53;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE -Y;FOA (Ambisonics B-Format);44100;4;9.82;1.0;0.0;106.95;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE -Y;Binaural estándar;44100;2;9.83;1.0;0.0;106.61;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE -Y;Binaural 3D Perceptual;44100;2;9.83;1.0;0.0;106.9;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE -Z;FOA (Ambisonics B-Format);44100;4;12.28;1.0;0.0;126.48;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE -Z;Binaural estándar;44100;2;12.29;1.0;0.0;108.47;0.0;1.0;SI
+Banco experimental de cuatro micrófonos;EJE -Z;Binaural 3D Perceptual;44100;2;12.29;1.0;0.0;106.07;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_alternating;FOA (Ambisonics B-Format);44100;4;5.0;1.0;0.0;84.22;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_alternating;Binaural estándar;44100;2;5.01;1.0;0.0;93.51;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_alternating;Binaural 3D Perceptual;44100;2;5.01;1.0;0.0;85.21;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_center;FOA (Ambisonics B-Format);44100;4;5.0;0.75;0.0;76.08;0.0;0.75;NO
+Banco auxiliar de señales espaciales;test_center;Binaural estándar;44100;2;5.01;1.0;0.0;110.48;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_center;Binaural 3D Perceptual;44100;2;5.01;1.0;0.0;98.62;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_left;FOA (Ambisonics B-Format);44100;4;5.0;0.5776;0.0;50.53;0.0;0.9294;NO
+Banco auxiliar de señales espaciales;test_left;Binaural estándar;44100;2;5.01;1.0;0.0;96.14;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_left;Binaural 3D Perceptual;44100;2;5.01;1.0;0.0;81.15;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_right;FOA (Ambisonics B-Format);44100;4;5.0;0.5776;0.0;50.53;0.0;0.9294;NO
+Banco auxiliar de señales espaciales;test_right;Binaural estándar;44100;2;5.01;1.0;0.0;94.37;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_right;Binaural 3D Perceptual;44100;2;5.01;1.0;0.0;87.28;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_sweep;FOA (Ambisonics B-Format);44100;4;5.0;1.0;0.0;102.14;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_sweep;Binaural estándar;44100;2;5.01;1.0;0.0;107.84;0.0;1.0;SI
+Banco auxiliar de señales espaciales;test_sweep;Binaural 3D Perceptual;44100;2;5.01;1.0;0.0;95.73;0.0;1.0;SI

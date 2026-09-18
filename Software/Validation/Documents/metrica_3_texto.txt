@@ -1,0 +1,10 @@
+Impulso central de 2 segundos 
+ 
+A02_CENTRO
+A02_LEFT
+A02_RIGHT
+A03
+A04
+A05
+A06
+A07

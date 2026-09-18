@@ -1,0 +1,10 @@
+﻿Banco;Banco_tag;Subcarpeta;Posicion_esperada;Direccion;RMS_Left;RMS_Right;ILD_dB;ITD_ms;ITD_samples;Fs_Hz;Cumple_ILD;Cumple_ITD;CUMPLE_METRICA
+Banco auxiliar de señales espaciales;Auxiliar;test_left;Izquierda;Left;0.6677068188821974;0.35840547409104284;5.4;0.363;16;44100;SI;SI;SI
+Banco auxiliar de señales espaciales;Auxiliar;test_center;Centro;Center;0.6330803319378343;0.6623314374406684;-0.39;0.023;1;44100;SI;SI;SI
+Banco auxiliar de señales espaciales;Auxiliar;test_right;Derecha;Right;0.321602184897723;0.6701976937639365;-6.38;-0.317;-14;44100;SI;SI;SI
+Banco estéreo de señales controladas;Stereo;A02_tono_1kHz_left;Izquierda;Left;0.5824906406154342;0.38212046773406283;3.66;-0.021;-1;48000;SI;NO;NO
+Banco estéreo de señales controladas;Stereo;A02_tono_1kHz_center;Centro;Center;0.5358226066007835;0.5469018743550588;-0.18;0.0;0;48000;SI;SI;SI
+Banco estéreo de señales controladas;Stereo;A02_tono_1kHz_right;Derecha;Right;0.37215018888281715;0.5772146627003335;-3.81;0.021;1;48000;SI;NO;NO
+Banco experimental de cuatro micrófonos;Studio_4mic;EJE +Y;Izquierda (+Y);Left;0.07834481798593766;0.05005148868842535;3.89;-0.68;-30;44100;SI;NO;NO
+Banco experimental de cuatro micrófonos;Studio_4mic;EJE +X;Frente (+X);Center;0.06822443466232271;0.06820590924895209;0.0;-0.454;-20;44100;SI;NO;NO
+Banco experimental de cuatro micrófonos;Studio_4mic;EJE -Y;Derecha (-Y);Right;0.1247825019803829;0.09593825914606446;2.28;0.658;29;44100;NO;NO;NO

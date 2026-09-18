@@ -1,0 +1,1439 @@
+PROTOCOLO DE VALIDACIÓN DE LA PLATAFORMA WEB PARA LA CONVERSIÓN DE AUDIO ESTÉREO MULTIFUENTE A FORMATO AMBISÓNICO.
+Autores: Anwar Andrés Cuello Pabón – 2181702
+  Sharon Catalina Vargas Cortes – 2211259
+Director: Ing. Omar Javier Tíjaro Rojas
+Codirector: Nicolas Esteban Hernandez Bustos
+Universidad Industrial de Santander
+Escuela de Ingenierías Eléctrica, Electrónica y de Telecomunicaciones
+Bucaramanga2026-II
+Contenido
+INTRODUCCIÓN5
+OBJETIVO DEL PROTOCOLO5
+OBJETIVOS ESPECÍFICOS DEL PROTOCOLO DE VALIDACIÓN.6
+MARCO TEÓRICO6
+Fundamentos de audio espacial y representación Ambisonics6
+Representación Ambisonics de primer orden y convenciones de formato7
+Renderizado binaural y percepción espacial7
+Métricas objetivas para evaluación de señales de audio8
+Comparación con herramientas de referencia8
+Evaluación del desempeño computacional9
+DISEÑO EXPERIMENTAL Y METODOLOGÍA DE VALIDACIÓN9
+Enfoque general de validación9
+Sistemas evaluados10
+Banco de señales de prueba10
+Herramientas y condiciones experimentales11
+Procedimiento general de evaluación11
+MÉTRICAS12
+Métrica 1 — Validación de la estructura Ambisonics FOA12
+Objetivo12
+Fundamentación12
+Configuración experimental13
+Procedimiento14
+Variables y métricas evaluadas16
+Criterios de aceptación18
+Evidencias generadas19
+Métrica 2 — Comparación del conversor original frente a la implementación en plataforma21
+Objetivo21
+Fundamentación21
+Configuración experimental22
+Procedimiento23
+Variables y métricas evaluadas24
+Criterios de aceptación26
+Evidencias generadas28
+Métrica 3 – Evaluación de estabilidad del procesamiento durante la conversión29
+Objetivo29
+Fundamentación29
+Configuración experimental30
+Procedimiento31
+Variables y métricas evaluadas32
+Criterios de aceptación33
+Evidencias generadas34
+Métrica 4 — Evaluación del desempeño computacional de la plataforma35
+Objetivo35
+Fundamentación35
+Configuración experimental36
+Procedimiento36
+Variables y métricas evaluadas37
+Criterios de aceptación38
+Evidencias generadas39
+Métrica 5 — Comparación con IEM Plug-in Suite y validación física mediante ITD e ILD40
+Objetivo40
+Fundamentación40
+Configuración experimental41
+Procedimiento41
+Variables y métricas evaluadas41
+Criterios de aceptación41
+Evidencias generadas42
+Métrica 6 — Evaluación binaural mediante diferencias ITD e ILD42
+Objetivo42
+Fundamentación42
+Configuración experimental42
+Procedimiento43
+Variables y métricas evaluadas43
+Criterios de aceptación43
+Evidencias generadas43
+Métrica 7 — Evaluación perceptual del sistema mediante prueba con usuarios43
+Objetivo43
+Fundamentación44
+Configuración experimental44
+Procedimiento44
+Variables y métricas evaluadas44
+Criterios de aceptación44
+Evidencias generadas45
+INTRODUCCIÓN
+La validación de un sistema de procesamiento digital de señales es una etapa fundamental para garantizar que su funcionamiento sea correcto, reproducible y coherente con los objetivos de diseño planteados. En el caso de una plataforma orientada a la conversión de audio estéreo multifuente a formato Ambisonics, no basta con comprobar la generación de una salida sonora; es necesario evaluar la fidelidad del procesamiento, la estabilidad del sistema, el desempeño computacional y la coherencia espacial del resultado obtenido.El presente protocolo establece la metodología de evaluación de la plataforma web desarrollada, definiendo las pruebas, métricas, señales de entrada, criterios de comparación y evidencias necesarias para analizar su comportamiento. Para ello, se emplean análisis cuantitativos sobre las señales generadas, comparación con implementaciones de referencia y pruebas orientadas a verificar la percepción espacial del audio resultante.De esta manera, las métricas propuestas permiten determinar si la plataforma cumple con los requerimientos funcionales y técnicos establecidos, proporcionando una evaluación objetiva del desempeño del sistema y de su capacidad para generar contenido ambisónico de forma confiable.
+OBJETIVO DEL PROTOCOLO
+Partimos del objetivo específico N° 4 del proyecto; “Evaluar la funcionalidad y desempeño de la interfaz desarrollada, comparando sus resultados con herramientas o paquetes de software’s ambisónicos existentes.” Y le agregamos detalles, para especificar el método empleado;
+“Evaluar la funcionalidad, desempeño y comportamiento espacial de la plataforma web desarrollada para la conversión de audio estéreo multifuente a formato Ambisonics, mediante la ejecución de pruebas experimentales que permitan verificar la calidad de las señales generadas, la estabilidad del procesamiento, la eficiencia computacional del sistema y su correspondencia con implementaciones de referencia.”
+OBJETIVOS ESPECÍFICOS DEL PROTOCOLO DE VALIDACIÓN.
+Verificar la correcta generación de señales Ambisonics mediante el análisis de la estructura del formato obtenido, evaluando la organización de canales, distribución energética y coherencia de la representación espacial generada por la plataforma. 
+Determinar la fidelidad del procesamiento implementado en la plataforma web respecto a la versión de referencia del algoritmo, mediante la comparación cuantitativa de las señales generadas bajo condiciones equivalentes. 
+Evaluar la estabilidad del sistema durante el procesamiento de archivos de diferente duración, verificando que la implementación por bloques no introduzca discontinuidades o alteraciones perceptibles en la señal de salida. 
+Analizar el desempeño computacional de la plataforma mediante la medición de tiempos de procesamiento, consumo de recursos y capacidad de respuesta ante diferentes condiciones de operación. 
+Comparar el comportamiento espacial de la salida ambisónica generada con herramientas de referencia existentes, utilizando métricas objetivas y análisis de localización espacial que permitan determinar la coherencia del resultado obtenido. 
+Evaluar la percepción espacial y experiencia de usuario asociada a la plataforma, considerando la capacidad del sistema para representar adecuadamente cambios de posición sonora y facilitar su utilización.
+MARCO TEÓRICO
+Fundamentos de audio espacial y representación Ambisonics
+Los sistemas de audio espacial buscan representar y reproducir información sonora considerando no solamente sus características temporales y espectrales, sino también su distribución espacial dentro de un entorno tridimensional. 
+Entre las técnicas utilizadas para este propósito se encuentra Ambisonics, un formato basado en la representación del campo sonoro mediante componentes asociadas a armónicos esféricos.
+A diferencia de los sistemas estéreo tradicionales, donde la información espacial está limitada principalmente al plano horizontal, Ambisonics permite describir la dirección de llegada del sonido y posteriormente adaptar la representación obtenida a diferentes sistemas de reproducción, como arreglos de altavoces o renderizado binaural mediante audífonos.
+Dentro del presente protocolo, estos fundamentos permiten establecer las bases para evaluar si la plataforma desarrollada genera una representación espacial coherente con el modelo Ambisonics esperado.
+Representación Ambisonics de primer orden y convenciones de formato
+La representación Ambisonics de primer orden (First Order Ambisonics, FOA) utiliza cuatro componentes principales para describir el campo sonoro:
+W: componente omnidireccional asociada a la presión sonora. 
+X: componente asociada al eje frontal. 
+Y: componente asociada al eje lateral. 
+Z: componente asociada al eje vertical. 
+La correcta generación de estas componentes es fundamental para garantizar que la información espacial pueda ser interpretada posteriormente por diferentes herramientas compatibles.
+Además de la cantidad de canales generados, una señal Ambisonics requiere una organización específica de sus componentes. En este proyecto se emplea la convención AmbiX, basada en el orden de canales ACN (Ambisonic Channel Number) y la normalización SN3D (Schmidt Semi-Normalized). Estas convenciones permiten la interoperabilidad entre diferentes implementaciones y son un aspecto clave dentro de la validación del sistema.
+Renderizado binaural y percepción espacial
+Una representación Ambisonics puede transformarse en una señal binaural para su reproducción mediante audífonos. Este proceso utiliza funciones de transferencia relacionadas con la cabeza (Head Related Transfer Functions, HRTF), las cuales modelan las modificaciones que experimenta una onda sonora debido a la anatomía del oyente.
+La percepción de ubicación espacial depende principalmente de diferencias entre las señales recibidas por ambos oídos. Entre los parámetros más relevantes se encuentran:
+Diferencia temporal interaural (ITD): relacionada con el tiempo de llegada del sonido a cada oído. 
+Diferencia de nivel interaural (ILD): relacionada con la diferencia de amplitud entre ambos oídos. 
+Estas características permiten evaluar si la salida binaural generada mantiene un comportamiento espacial coherente con la posición asignada a cada fuente sonora.
+Métricas objetivas para evaluación de señales de audio
+La validación de sistemas de procesamiento digital de señales requiere el uso de métricas cuantitativas que permitan comparar resultados bajo condiciones controladas.
+Entre las métricas utilizadas para analizar señales de audio se encuentran la correlación temporal, el error cuadrático medio (RMSE), análisis energético, análisis espectral y detección de alteraciones como discontinuidades, saturación o pérdida de información.
+Estas medidas permiten determinar si la plataforma conserva las características esperadas de la señal durante las diferentes etapas de procesamiento, así como comparar su comportamiento frente a implementaciones de referencia.
+Comparación con herramientas de referencia
+La comparación con herramientas existentes constituye una estrategia importante para validar el comportamiento de una implementación propia. En el contexto de Ambisonics, herramientas especializadas como la IEM Plug-in Suite permiten generar y procesar contenido utilizando convenciones ampliamente aceptadas dentro del área.
+Sin embargo, una comparación entre sistemas no busca necesariamente obtener señales idénticas muestra a muestra, debido a que diferentes implementaciones pueden utilizar estrategias internas distintas. Por esta razón, la validación se orienta a verificar que los sistemas presenten un comportamiento equivalente en aspectos como distribución espacial, energía de las componentes y respuesta perceptual.
+Evaluación del desempeño computacional
+Además de la calidad de la señal generada, una plataforma digital de procesamiento de audio debe ser evaluada considerando su comportamiento computacional.
+Aspectos como el tiempo de procesamiento, la relación entre duración del audio y tiempo de conversión, estabilidad ante diferentes tamaños de entrada y uso de recursos permiten determinar la viabilidad práctica del sistema desarrollado.
+Estas pruebas son especialmente relevantes en aplicaciones que involucran procesos computacionalmente exigentes, como la generación Ambisonics, convolución con HRTF y procesamiento por bloques.
+DISEÑO EXPERIMENTAL Y METODOLOGÍA DE VALIDACIÓN
+Enfoque general de validación
+La validación de la plataforma desarrollada se plantea mediante una metodología experimental basada en pruebas objetivas y comparativas, orientadas a evaluar diferentes aspectos del sistema, incluyendo la correcta generación de contenido Ambisonics, la fidelidad del procesamiento implementado, la estabilidad durante la conversión, el desempeño computacional y la coherencia espacial de las señales obtenidas.
+Para ello, se establecen condiciones controladas de prueba que permiten analizar el comportamiento de la plataforma bajo diferentes tipos de señales de entrada y comparar los resultados obtenidos frente a implementaciones de referencia cuando sea aplicable.La metodología busca garantizar que las mediciones realizadas sean reproducibles, evitando modificar el sistema evaluado durante el proceso de análisis. Las herramientas de validación se utilizan únicamente para extraer métricas, analizar resultados y generar evidencias del comportamiento del sistema.
+Sistemas evaluados
+La validación considera tres elementos principales:
+Implementación original del algoritmo: corresponde a la versión inicial del procesamiento digital de señales utilizada como referencia durante el desarrollo. Esta implementación permite verificar que la integración del algoritmo dentro de la plataforma web conserve el comportamiento esperado.
+Plataforma web desarrollada: corresponde al sistema principal evaluado, encargado de recibir señales estéreo multifuente, realizar el procesamiento espacial y generar las salidas en formato Ambisonics y binaural.
+Herramientas de referencia externas: corresponden a implementaciones existentes utilizadas para realizar comparaciones bajo condiciones equivalentes. Estas herramientas permiten evaluar la coherencia del comportamiento espacial y energético de la plataforma frente a soluciones reconocidas dentro del área de audio espacial.
+Banco de señales de prueba
+Para evaluar el comportamiento del sistema se emplea un banco de señales diseñado para representar diferentes condiciones de operación. Las señales incluyen pruebas sintéticas y contenido sonoro de mayor complejidad, permitiendo analizar tanto características específicas del procesamiento como su desempeño frente a señales reales.
+El banco de pruebas contempla señales como:
+impulsos unitarios, utilizados para analizar respuesta temporal y comportamiento del procesamiento.
+tonos de frecuencia conocida, empleados para verificar estabilidad espectral.
+señales de ruido, utilizadas para evaluar comportamiento general de energía.
+fragmentos musicales y señales de mayor duración, empleados para analizar procesamiento continuo y estabilidad. 
+Cada archivo de prueba debe contar con información asociada como frecuencia de muestreo, duración, formato, número de canales y propósito dentro de la validación.
+Herramientas y condiciones experimentales
+Para garantizar la reproducibilidad de los resultados, las pruebas deben ejecutarse bajo condiciones experimentales documentadas, incluyendo:
+versión del software evaluado
+configuración del sistema operativo
+características del equipo utilizado
+versión de dependencias principales
+frecuencia de muestreo de los archivos de entrada
+formato de salida analizado
+Los análisis se realizan mediante scripts independientes de validación, cuya función es medir y analizar las señales generadas sin alterar el procesamiento interno de la plataforma.
+Procedimiento general de evaluación
+El procedimiento general de validación se desarrolla mediante las siguientes etapas:
+Selección de la señal de prueba correspondiente a la métrica evaluada. 
+Procesamiento de la señal mediante la plataforma desarrollada bajo condiciones definidas. 
+Obtención de los archivos de salida generados por el sistema. 
+Aplicación de herramientas de análisis para calcular las métricas establecidas. 
+Comparación de los resultados obtenidos frente a referencias o criterios de aceptación definidos. 
+Registro de resultados mediante tablas, gráficas y archivos de evidencia. 
+De esta manera, cada métrica de validación permite evaluar un aspecto específico del sistema, manteniendo una metodología común que facilita la interpretación y comparación de resultados.
+MÉTRICAS
+Cada métrica desarrollada dentro del protocolo contribuye a la validación integral de la plataforma de conversión Ambisonics.
+Métrica 1 — Validación de la estructura Ambisonics FOA
+La Métrica 1 permite verificar que el algoritmo genera correctamente una representación Ambisonics FOA, evaluando la estructura de canales, componentes espaciales y comportamiento energético.
+Objetivo
+Verificar que el algoritmo de conversión Ambisonics implementado en el sistema genera correctamente señales en formato First Order Ambisonics (FOA), evaluando la estructura de canales, comportamiento energético y respuesta espacial esperada según la convención utilizada.
+Esta métrica busca determinar si el proceso de conversión implementado permite obtener una señal ambisónica válida y compatible con las convenciones establecidas para su posterior procesamiento, reproducción o comparación con otras herramientas de audio espacial.
+Fundamentación
+Una representación Ambisonics requiere que la información espacial del campo sonoro sea almacenada de acuerdo con una estructura definida, donde cada componente representa una contribución específica de la distribución espacial del sonido. En una representación de primer orden (FOA), las componentes W, X, Y y Z contienen la información omnidireccional y direccional del campo sonoro, permitiendo reconstruir posteriormente una escena sonora tridimensional.
+Sin embargo, la correcta generación de una señal Ambisonics no depende únicamente de obtener un archivo multicanal, sino también de garantizar que sus componentes cumplan con las convenciones de organización y normalización utilizadas por el ecosistema Ambisonics. Para este proyecto se considera la convención AmbiX, basada en el orden de canales ACN (Ambisonic Channel Number) y la normalización SN3D (Schmidt Semi-Normalized), debido a su amplia compatibilidad con herramientas de procesamiento y reproducción de audio espacial.
+Por esta razón, esta métrica evalúa aspectos estructurales y energéticos de la salida generada por el algoritmo de conversión, verificando que las componentes Ambisonics presenten un comportamiento coherente con la representación espacial esperada. De esta manera, se establece una primera validación del sistema antes de realizar comparaciones más avanzadas con implementaciones externas o evaluaciones perceptuales.
+Configuración experimental
+La evaluación de la estructura Ambisonics se realiza a partir de las señales generadas mediante las funciones DSP encargadas de la conversión FOA dentro del proyecto. 
+Las pruebas se realizan utilizando un conjunto de señales de entrada diseñado para evaluar diferentes características del procesamiento espacial. Este banco de pruebas incluye señales controladas, como impulsos y tonos de frecuencia conocida, además de señales de mayor complejidad como fragmentos musicales, permitiendo analizar el comportamiento de la representación Ambisonics bajo diferentes condiciones de operación.
+La salida evaluada corresponde a un archivo de audio multicanal en formato WAV, generado bajo la convención AmbiX. Para el análisis se verifica que la señal cumpla con la organización esperada de canales según el esquema ACN/SN3D, considerando las componentes espaciales correspondientes a una representación de primer orden.
+Durante esta etapa se evalúan principalmente los siguientes aspectos:
+Número de canales generados y correspondencia con la representación Ambisonics esperada. 
+Organización de las componentes espaciales según la convención utilizada. 
+Distribución energética entre los canales generados. 
+Presencia de errores de señal como saturación, valores no definidos o alteraciones que puedan afectar la interpretación espacial del contenido.
+Los resultados obtenidos serán analizados mediante herramientas de validación independientes, encargadas de extraer las métricas correspondientes sin intervenir en el procesamiento interno de la plataforma.
+Procedimiento
+La validación de la estructura Ambisonics FOA se desarrolla mediante un flujo de procesamiento común para los diferentes bancos de señales utilizados. El procedimiento permite analizar tanto señales estéreo controladas como grabaciones experimentales realizadas mediante una configuración de cuatro micrófonos, evaluando la correcta generación de las componentes espaciales del formato FOA.
+Selección del banco de señales de prueba
+Se selecciona el conjunto de señales correspondiente al análisis requerido. La validación utiliza dos bancos principales:
+Banco estéreo de señales controladas: compuesto por señales diseñadas para evaluar el comportamiento del conversor estéreo hacia FOA bajo condiciones conocidas. 
+Banco experimental de cuatro micrófonos: compuesto por grabaciones utilizadas para analizar la respuesta espacial de las componentes FOA frente a posiciones físicas conocidas. 
+La selección del banco depende del objetivo específico de la prueba a realizar.
+Procesamiento mediante las funciones DSP del sistema
+Las señales seleccionadas son procesadas mediante las funciones DSP implementadas en el proyecto, encargadas de realizar la conversión hacia formato FOA.
+En esta etapa se genera la representación Ambisonics correspondiente, obteniendo las componentes espaciales necesarias para el análisis posterior. El procesamiento se realiza directamente sobre el núcleo de conversión, permitiendo evaluar el comportamiento del algoritmo sin introducir modificaciones adicionales sobre la señal generada.
+Extracción de componentes Ambisonics
+Una vez obtenida la señal FOA, se separan las componentes individuales correspondientes al formato utilizado:
+W: componente omnidireccional. 
+X, Y & Z: componentes direccionales asociadas a los ejes espaciales. 
+Estas componentes son utilizadas posteriormente para calcular las métricas estructurales, energéticas y espaciales definidas para la validación.
+Análisis según el tipo de señal utilizada
+Dependiendo del banco seleccionado, se realizan análisis específicos:
+Para las señales del banco estéreo, se evalúan características como estructura de canales, distribución energética, niveles RMS y comportamiento general de las componentes FOA. 
+Para las grabaciones del banco experimental de cuatro micrófonos, se analizan segmentos asociados a direcciones espaciales conocidas (+X, -X, +Y, -Y, +Z y -Z), verificando que las componentes FOA presenten la respuesta direccional esperada. 
+Cálculo de métricas de validación
+A partir de las componentes obtenidas se calculan las métricas definidas para evaluar la estructura FOA, incluyendo parámetros asociados a:
+organización de canales.
+niveles energéticos.
+comportamiento direccional.
+integridad de la señal.
+detección de posibles errores como valores inválidos o saturación. 
+Generación y almacenamiento de resultados
+Finalmente, los resultados obtenidos son almacenados mediante tablas y representaciones gráficas que permiten analizar el comportamiento de la señal generada.
+Los resultados incluyen archivos de datos y visualizaciones utilizadas para interpretar la correcta generación estructural y espacial del formato FOA.
+Variables y métricas evaluadas
+Para verificar la correcta generación de la representación Ambisonics FOA, se analizan diferentes características de la señal obtenida después del proceso de conversión. Estas variables permiten evaluar tanto la estructura del archivo generado como el comportamiento energético y espacial de sus componentes.
+Verificación estructural de la señal FOA
+Inicialmente se evalúan características generales del archivo generado, con el objetivo de comprobar que la salida corresponde a una representación Ambisonics válida. Las variables consideradas son:
+Número de canales: permite verificar que la señal generada contiene la cantidad de componentes correspondiente al formato FOA evaluado. 
+Frecuencia de muestreo: permite confirmar que la señal mantiene la frecuencia esperada para el procesamiento realizado. 
+Duración de la señal: permite verificar que el proceso de conversión conserva la longitud temporal de la entrada. 
+Integridad del archivo: se analiza la presencia de valores inválidos como datos no definidos (NaN) o infinitos (Inf), los cuales indicarían errores durante el procesamiento. 
+Análisis energético de las componentes FOA
+La representación FOA está compuesta por las señales W, X, Y y Z, cuya distribución energética permite analizar el comportamiento de la información espacial generada. Para cada componente se calcula el valor RMS (Root Mean Square), definido como:
+donde:
+corresponde a la muestra de la señal analizada.
+ corresponde al número total de muestras. 
+El análisis RMS permite comparar la contribución energética de cada componente y verificar que la señal mantiene una distribución coherente entre la componente omnidireccional y las componentes direccionales.
+Evaluación del comportamiento direccional
+Para las señales provenientes del banco experimental de cuatro micrófonos, se evalúa la respuesta espacial de las componentes FOA frente a direcciones conocidas. Los segmentos analizados corresponden a posiciones:
++X 
+–X 
++Y 
+-Y 
++Z 
+-Z 
+La finalidad de esta evaluación es verificar que la componente asociada al eje espacial correspondiente presente una respuesta dominante respecto a las demás componentes, manteniendo la relación esperada entre dirección física y representación Ambisonics.
+Detección de alteraciones en la señal
+Finalmente, se evalúan condiciones que pueden afectar la validez de la señal generada:
+Clipping: detección de muestras que superan el rango permitido de amplitud, indicando posibles saturaciones. 
+Valores inválidos: identificación de errores numéricos producidos durante el procesamiento. 
+Estas verificaciones permiten garantizar que la señal generada pueda ser utilizada posteriormente en etapas de renderizado, comparación con otras implementaciones o análisis perceptual.
+Criterios de aceptación
+La Métrica 1 se considera satisfactoria cuando la señal generada mediante las funciones DSP del sistema cumple con las condiciones estructurales, energéticas y espaciales esperadas para una representación Ambisonics FOA.
+Los criterios definidos para la evaluación son los siguientes:
+Correspondencia estructural del formato FOA
+La señal generada debe cumplir con la estructura esperada para una representación Ambisonics de primer orden:
+El número de canales de salida debe corresponder al formato FOA utilizado. 
+La organización de las componentes debe conservar la convención definida para el procesamiento. 
+La frecuencia de muestreo y duración de la señal deben mantenerse de acuerdo con las condiciones de entrada establecidas. 
+La señal cumple cuando la estructura del archivo generado coincide con la configuración esperada y no presenta inconsistencias durante la lectura o análisis.
+Integridad de la señal generada
+La salida del procesamiento no debe presentar errores numéricos o alteraciones que comprometan su utilización posterior. Se verifica:
+Ausencia de valores no definidos (NaN). 
+Ausencia de valores infinitos (Inf). 
+Ausencia de saturación por clipping. 
+La señal cumple cuando no se detectan valores inválidos ni saturaciones que afecten la representación obtenida.
+Coherencia energética entre componentes FOA
+Las componentes W, X, Y y Z deben presentar niveles energéticos coherentes con la información espacial representada. El análisis mediante valores RMS debe permitir identificar una distribución razonable entre:
+componente omnidireccional W 
+componentes direccionales X, Y & Z. 
+La señal cumple cuando la distribución energética de las componentes un comportamiento consistente con la representación espacial esperada y no existen componentes con comportamiento anómalo.
+Correspondencia espacial en grabaciones de cuatro micrófonos
+Para las señales obtenidas mediante el banco experimental de cuatro micrófonos, la respuesta de las componentes FOA debe corresponder con la dirección física analizada. Se evalúan las posiciones:
++X 
+–X 
++Y 
+–Y 
++Z 
+–Z 
+La señal cumple cuando cada dirección evaluada presenta una respuesta dominante asociada al eje espacial correspondiente, evidenciando coherencia entre la posición física de la fuente y la representación FOA generada.
+Evaluación global de la métrica
+La Métrica 1 será considerada aprobada cuando los análisis estructurales, energéticos y espaciales no evidencien errores que comprometan la validez de la representación FOA generada. Los resultados serán registrados mediante tablas resumen donde cada variable evaluada contará con:
+Valor obtenido.
+Condición esperada.
+Estado de cumplimiento.
+Evidencias generadas
+Como resultado de la ejecución de la Métrica 1 se generan diferentes evidencias que permiten verificar la correcta construcción de la representación Ambisonics FOA y respaldar los resultados obtenidos durante el análisis.
+Las evidencias generadas incluyen:
+Archivos FOA obtenidos durante la validación: corresponden a las señales generadas mediante las funciones DSP del sistema a partir de los bancos de prueba utilizados. 
+Tablas de resultados: contienen los valores calculados para las variables evaluadas, incluyendo características estructurales de la señal, niveles energéticos de las componentes FOA y resultados de los análisis realizados. 
+Gráficas de comportamiento: permiten visualizar la distribución energética de las componentes W, X, Y y Z, así como la respuesta direccional obtenida para las señales experimentales de cuatro micrófonos. 
+Reportes de cumplimiento: resumen los resultados obtenidos para cada criterio evaluado, facilitando la interpretación final de la métrica. 
+Los resultados generados son almacenados en la ruta correspondiente a la validación de la Métrica 1:
+validation/results/metrica_1/
+donde se incluyen archivos de datos, gráficas y señales FOA utilizadas como evidencia del proceso de evaluación. 
+Como consolidación final de la prueba, se propone una tabla resumen donde se relaciona cada variable evaluada con el resultado obtenido y su condición de cumplimiento.
+Parámetro evaluado
+Resultado obtenido
+Condición esperada
+Cumple
+Número de canales FOA
+Correspondencia con formato FOA esperado
+Frecuencia de muestreo
+Igual a la definida en la prueba
+Duración de la señal
+|
+Conservación respecto a la entrada
+Valores NaN/Inf
+No presencia de valores inválidos
+Clipping
+No presencia de saturación
+Distribución energética W/X/Y/Z
+Comportamiento coherente con FOA
+Respuesta direccional tetra (+X,-X,+Y,-Y,+Z,-Z)
+Correspondencia entre dirección y componente dominante
+Esta tabla permite presentar de forma resumida la conclusión de la Métrica 1, indicando si la representación FOA generada cumple con las condiciones estructurales y espaciales esperadas.
+Métrica 2 — Comparación del conversor original frente a la implementación en plataforma
+La Métrica 2 permite comprobar que la integración del algoritmo dentro de la plataforma web conserva el comportamiento de la implementación original utilizada como referencia.
+Objetivo
+Evaluar la equivalencia funcional entre la implementación original del algoritmo de conversión Ambisonics y su integración dentro de la plataforma web, mediante la comparación de las señales generadas bajo condiciones experimentales equivalentes.
+Esta métrica busca verificar que la adaptación del algoritmo hacia la arquitectura de la plataforma conserve las características principales del procesamiento original, incluyendo la estructura de la señal Ambisonics generada, su comportamiento energético y la información espacial representada.
+Fundamentación
+Durante el desarrollo de una aplicación basada en procesamiento digital de señales, la migración de un algoritmo desde un entorno experimental hacia una implementación integrada puede introducir modificaciones asociadas a cambios en la arquitectura del software, manejo de datos, procesamiento de archivos o integración con nuevos componentes.
+Por esta razón, es necesario validar que la implementación final conserve el comportamiento de la versión de referencia utilizada durante la etapa de desarrollo. En este contexto, el conversor original funciona como referencia para determinar si la versión integrada en la plataforma web mantiene la misma lógica de procesamiento y genera resultados equivalentes bajo las mismas condiciones de entrada.
+La comparación entre ambas implementaciones permite identificar posibles diferencias introducidas durante el proceso de integración y determinar si estas afectan características relevantes de la señal generada, como amplitud, distribución energética, estructura multicanal y representación espacial.
+De esta manera, esta métrica permite validar la correcta transferencia del algoritmo de conversión Ambisonics desde el entorno de desarrollo inicial hacia la plataforma web final.
+Configuración experimental
+La validación se realiza mediante la comparación directa entre dos implementaciones del algoritmo de conversión Ambisonics:
+Conversor original: corresponde a la implementación de referencia desarrollada durante la etapa inicial del proyecto, utilizada para verificar el funcionamiento del algoritmo antes de su integración en la plataforma web. 
+Implementación en plataforma web: corresponde al algoritmo integrado dentro de la arquitectura final del sistema, ejecutado mediante los módulos de procesamiento del back-end. 
+Ambas implementaciones son evaluadas utilizando las mismas señales de entrada y bajo condiciones equivalentes de procesamiento, con el objetivo de garantizar una comparación objetiva entre los resultados obtenidos.
+El banco de pruebas está compuesto por señales estéreo seleccionadas para representar diferentes condiciones de operación del conversor, incluyendo señales controladas y contenido de audio de mayor complejidad. Para cada prueba se conservan los mismos parámetros de entrada, tales como:
+archivo de audio utilizado, 
+frecuencia de muestreo, 
+duración de la señal, 
+configuración espacial asignada a la fuente, 
+orden Ambisonics utilizado, 
+parámetros de renderizado definidos. 
+Las salidas obtenidas corresponden a los archivos Ambisonics generados por cada implementación, los cuales son posteriormente analizados para determinar el nivel de similitud entre ambas versiones.
+Procedimiento
+La comparación entre el conversor original y la implementación integrada en la plataforma se desarrolla mediante las siguientes etapas:
+Selección de señales de prueba
+Se seleccionan las señales de entrada utilizadas para la comparación, asegurando que cada archivo pueda ser procesado por ambas implementaciones bajo las mismas condiciones experimentales.
+Para cada señal se registran sus características principales, incluyendo duración, frecuencia de muestreo y parámetros espaciales asociados.
+Procesamiento mediante el conversor original
+Cada señal seleccionada es procesada utilizando la implementación original del algoritmo de conversión Ambisonics, obteniendo una señal de referencia que representa el comportamiento esperado del sistema.
+Los archivos generados en esta etapa son almacenados como referencia para la comparación posterior.
+Procesamiento mediante la plataforma web
+Las mismas señales de entrada son procesadas mediante la implementación integrada en la plataforma web, utilizando la configuración equivalente a la empleada en el conversor original.
+La salida obtenida corresponde al resultado generado por la versión final del sistema.
+Normalización y preparación de señales
+Antes de realizar la comparación, ambas salidas son verificadas para asegurar que presentan condiciones equivalentes de análisis. Se comprueba:
+mismo número de canales, 
+misma frecuencia de muestreo, 
+misma duración, 
+correcta organización de componentes Ambisonics. 
+En caso de ser necesario, se aplican ajustes únicamente para facilitar la comparación, sin modificar las características propias de las señales generadas.
+Comparación de resultados
+Las señales generadas por ambas implementaciones son analizadas mediante métricas cuantitativas orientadas a determinar su grado de similitud.
+El análisis considera diferencias entre las señales obtenidas, evaluando aspectos como comportamiento temporal, distribución energética y características de la representación Ambisonics.
+Registro de resultados
+Finalmente, los resultados obtenidos son almacenados mediante tablas y representaciones gráficas que permiten visualizar las diferencias entre ambas implementaciones y determinar si la integración del algoritmo conserva el comportamiento esperado.
+Variables y métricas evaluadas
+Para determinar la equivalencia entre el conversor original y la implementación integrada en la plataforma web, se analizan las señales generadas por ambas versiones mediante métricas cuantitativas que permiten evaluar similitud temporal, energética y espectral. Las variables evaluadas son las siguientes:
+Comparación estructural de las señales generadas
+Antes de realizar comparaciones numéricas, se verifica que ambas salidas correspondan a señales equivalentes en cuanto a sus características generales. Se evalúan:
+Número de canales generados. 
+Frecuencia de muestreo. 
+Duración de la señal. 
+Organización de los canales Ambisonics. 
+Esta verificación permite garantizar que las señales comparadas representan la misma información espacial bajo condiciones equivalentes.
+Similitud temporal entre señales
+Para determinar qué tan semejantes son las formas de onda generadas por ambas implementaciones, se utiliza la correlación temporal entre las señales de referencia y las señales obtenidas mediante la plataforma.
+La correlación permite medir la relación entre ambas señales y determinar si mantienen una evolución temporal equivalente.
+donde:
+ corresponde a las muestras del conversor original. 
+ corresponde a las muestras generadas por la plataforma. 
+Diferencia entre señales mediante error cuadrático
+Se calcula el error cuadrático medio (RMSE) entre ambas implementaciones para cuantificar la diferencia absoluta existente entre sus muestras.
+Un valor reducido indica que ambas señales presentan un comportamiento numéricamente cercano.
+Comparación energética
+Se analiza la distribución energética de ambas señales mediante valores RMS por canal Ambisonics. Esta comparación permite determinar si la implementación web conserva la misma relación energética entre las componentes espaciales generadas por el conversor original. Se evalúan las componentes correspondientes al formato utilizado:
+W. 
+X. 
+Y. 
+Z. 
+Comparación espectral
+Se realiza un análisis en frecuencia para identificar posibles modificaciones introducidas durante la integración del algoritmo. Esta evaluación permite detectar diferencias asociadas a:
+cambios en amplitud, 
+alteraciones espectrales, 
+pérdida de información en determinadas bandas de frecuencia.
+Diferencia entre canales Ambisonics
+Además del análisis global de la señal, se comparan individualmente las componentes espaciales generadas por ambas implementaciones. Esto permite identificar si alguna componente específica presenta diferencias mayores que puedan afectar la representación espacial del contenido.
+Criterios de aceptación
+La Métrica 2 se considera satisfactoria cuando la implementación integrada en la plataforma web conserva un comportamiento equivalente al conversor original bajo las mismas condiciones de entrada y configuración. Los criterios establecidos son:
+Correspondencia estructural
+Ambas implementaciones deben generar señales compatibles para comparación. Se cumple cuando ambas salidas presentan:
+igual número de canales.
+igual frecuencia de muestreo.
+igual duración.
+misma organización de componentes Ambisonics. 
+Similitud temporal
+La evolución temporal de las señales debe mantenerse equivalente entre ambas implementaciones. Se considera satisfactorio cuando la correlación obtenida indica una alta similitud entre las señales comparadas.
+Diferencia numérica controlada
+Las diferencias existentes entre muestras deben permanecer dentro de un rango aceptable. Se cumple cuando el error RMSE obtenido no evidencia diferencias significativas que puedan modificar el comportamiento esperado del algoritmo.
+Conservación energética
+La implementación web debe mantener la distribución energética generada por el conversor original. Se cumple cuando los niveles RMS de las componentes Ambisonics presentan comportamiento equivalente entre ambas versiones.
+Conservación espectral
+La integración del algoritmo no debe introducir modificaciones significativas en el contenido frecuencial de la señal. Se cumple cuando ambas señales presentan respuestas espectrales equivalentes dentro de las condiciones establecidas para la prueba.
+Evaluación global de la métrica
+La implementación de la plataforma será considerada equivalente al conversor original cuando las diferencias observadas no representen cambios relevantes en la estructura, energía o comportamiento espacial de la señal generada. Los resultados serán consolidados mediante una tabla final de validación donde se indique:
+Variable evaluada
+Resultado obtenido
+Condición esperada
+Cumple
+Estructura de salida
+Igual entre implementaciones
+Correlación temporal
+Alta similitud
+RMSE
+Diferencia controlada
+RMS por canal FOA
+Distribución equivalente
+Respuesta espectral
+Comportamiento equivalente
+Diferencia por componente Ambisonics
+Sin alteraciones significativas
+Evidencias generadas
+Como resultado de la ejecución de la Métrica 2 se generan diferentes evidencias que permiten analizar la equivalencia entre la implementación original del conversor Ambisonics y la versión integrada dentro de la plataforma web. Las evidencias generadas incluyen:
+Archivos de salida del conversor original: corresponden a las señales generadas por la implementación de referencia bajo las condiciones experimentales definidas. 
+Archivos de salida de la plataforma web: corresponden a las señales obtenidas mediante la implementación integrada del algoritmo dentro del sistema desarrollado. 
+Tablas comparativas: contienen los valores obtenidos para cada una de las métricas evaluadas, permitiendo cuantificar las diferencias entre ambas implementaciones. 
+Gráficas de comparación temporal y espectral: permiten visualizar similitudes y diferencias entre las señales generadas, incluyendo evolución temporal, distribución energética y comportamiento frecuencial. 
+Reporte de cumplimiento de la métrica: consolida los resultados obtenidos y determina si la implementación web conserva el comportamiento esperado respecto al conversor original. 
+Como evidencia final de la validación, los resultados se presentan mediante una tabla resumen que relaciona cada variable evaluada con el resultado obtenido y la condición esperada.
+Variable evaluada
+Resultado obtenido
+Condición esperada
+Cumple
+Número de canales generados
+Igual en ambas implementaciones
+Frecuencia de muestreo
+Igual en ambas implementaciones
+Duración de la señal
+Conservación temporal
+Correlación entre señales
+Alta similitud entre salidas
+Error RMSE
+Diferencia numérica controlada
+RMS por componente Ambisonics
+Distribución energética equivalente
+Comparación espectral
+Sin alteraciones relevantes
+Diferencia por canal FOA
+Comportamiento espacial equivalente
+La información recopilada permite determinar si la integración del algoritmo dentro de la plataforma web mantiene las características fundamentales del conversor original y si las diferencias encontradas afectan o no el comportamiento esperado del sistema.
+Métrica 3 – Evaluación de estabilidad del procesamiento durante la conversión
+La Métrica 3 evalúa la estabilidad del procesamiento durante diferentes condiciones de operación, verificando que el sistema mantiene la integridad de la señal generada.
+Objetivo
+Evaluar la estabilidad del procesamiento realizado por la plataforma web durante la conversión de señales de audio estéreo multifuente a formato Ambisonics, mediante pruebas con archivos de diferente duración y complejidad. Esta métrica busca determinar si la implementación desarrollada mantiene la integridad de la señal generada durante todo el proceso de conversión, verificando que el procesamiento por bloques utilizado por la plataforma no introduzca discontinuidades, pérdida de información, errores temporales o alteraciones que puedan afectar la calidad del resultado obtenido.
+Fundamentación
+En sistemas digitales de procesamiento de audio, especialmente aquellos orientados a señales de larga duración, es necesario garantizar que la ejecución del algoritmo conserve las características originales de la señal durante todo el proceso. Cuando un sistema implementa procesamiento por bloques, la señal de entrada es dividida en segmentos más pequeños que son procesados individualmente y posteriormente reconstruidos para generar la salida final. 
+Esta estrategia permite optimizar el uso de recursos computacionales, pero puede introducir errores asociados a la unión entre bloques, tales como discontinuidades temporales, cambios abruptos de amplitud o pérdida de muestras. Por esta razón, la validación de estabilidad permite determinar si la plataforma mantiene un comportamiento consistente independientemente de la duración o complejidad del archivo procesado.
+En esta métrica se analiza la respuesta del sistema frente a diferentes condiciones de operación, verificando que las señales Ambisonics generadas mantengan continuidad temporal, duración equivalente a la entrada y ausencia de alteraciones producto del proceso de conversión.
+Configuración experimental
+La evaluación de estabilidad se realiza utilizando la plataforma web desarrollada bajo diferentes condiciones de procesamiento, considerando archivos de audio con variaciones en duración y características espectrales. Las pruebas se realizan empleando un banco de señales compuesto por:
+Señales sintéticas de corta duración, utilizadas para detectar errores básicos de continuidad.
+Señales musicales de duración media, utilizadas para evaluar comportamiento durante procesamiento continuo.
+Señales de larga duración, utilizadas para analizar estabilidad durante cargas prolongadas. 
+Para cada archivo evaluado se registran sus características principales:
+Duración del audio.
+Frecuencia de muestreo.
+Formato de entrada.
+Número de canales. 
+Tamaño del archivo. 
+La salida analizada corresponde al archivo Ambisonics generado por la plataforma, el cual es evaluado mediante herramientas independientes de validación encargadas de analizar sus características sin modificar el procesamiento interno del sistema. Durante esta etapa se evalúan principalmente:
+Conservación de la duración temporal.
+Continuidad de la señal.
+Presencia de discontinuidades entre bloques.
+Pérdida o repetición de muestras.
+Aparición de errores durante la conversión. 
+Procedimiento
+La evaluación de estabilidad del procesamiento se desarrolla mediante las siguientes etapas:
+Selección del banco de señales de prueba
+Se seleccionan archivos de audio con diferentes características para representar distintos escenarios de operación. El banco utilizado contempla:
+Archivos de corta duración para validar el funcionamiento inicial del procesamiento.
+Archivos de duración media para analizar comportamiento continuo.
+Archivos extensos para evaluar estabilidad bajo mayor carga computacional. 
+Cada archivo seleccionado debe contar con información registrada sobre duración, frecuencia de muestreo, formato y propósito dentro de la prueba.
+Procesamiento mediante la plataforma web
+Cada señal seleccionada es cargada en la plataforma y procesada utilizando la configuración establecida para la conversión hacia formato Ambisonics. Durante esta etapa se registra:
+Inicio del procesamiento.
+Finalización de la conversión.
+Generación correcta del archivo de salida.
+Presencia de mensajes de error durante la ejecución. 
+Los archivos generados son almacenados para su posterior análisis.
+Verificación estructural de las señales obtenidas
+Una vez generada la salida Ambisonics, se verifica que conserve las características temporales esperadas respecto a la señal de entrada. Se analiza:
+Duración total del archivo. 
+Frecuencia de muestreo.
+Número de canales generados.
+Integridad del archivo obtenido. 
+Esta etapa permite descartar errores asociados a pérdida de información durante el procesamiento.
+Análisis de continuidad temporal
+Las señales generadas son analizadas para identificar posibles alteraciones introducidas durante el procesamiento por bloques. Se evalúan características como:
+Cambios abruptos de amplitud.
+Discontinuidades entre segmentos. 
+Presencia de silencios inesperados. 
+Pérdida de muestras. 
+El análisis permite determinar si la reconstrucción de la señal mantiene continuidad temporal adecuada.
+Comparación entre diferentes condiciones de procesamiento
+Los resultados obtenidos para diferentes duraciones de audio son comparados con el objetivo de determinar si el comportamiento del sistema permanece estable ante cambios en la carga de procesamiento. Se analizan diferencias en:
+Integridad de la señal.
+Comportamiento temporal.
+Generación correcta del archivo de salida. 
+Registro de resultados
+Finalmente, los resultados obtenidos son almacenados mediante tablas y representaciones gráficas que permiten interpretar el comportamiento del sistema bajo diferentes condiciones de operación.
+Variables y métricas evaluadas
+Para determinar la estabilidad del procesamiento realizado por la plataforma se evalúan las siguientes variables:
+Conservación temporal de la señal
+Se compara la duración del audio de entrada respecto a la duración del archivo Ambisonics generado. Variables evaluadas:
+Duración de entrada.
+Duración de salida.
+Diferencia temporal entre ambas. 
+Esta variable permite identificar pérdidas o alteraciones durante la conversión.
+Integridad de la señal generada
+Se analiza la presencia de errores que puedan afectar la validez del archivo generado. Se evalúa:
+Valores inválidos (NaN o Inf). 
+Muestras faltantes.
+Errores de lectura del archivo. 
+Saturaciones inesperadas. 
+Continuidad entre bloques de procesamiento
+Se analiza la existencia de discontinuidades producidas durante la reconstrucción de la señal. Variables consideradas:
+Variaciones abruptas de amplitud. 
+Cambios instantáneos entre segmentos.
+Interrupciones temporales. 
+Comportamiento frente a diferentes duraciones
+Se evalúa la respuesta del sistema utilizando archivos con diferentes tiempos de duración. Variables:
+Duración del archivo.
+Tiempo de ejecución. 
+Resultado exitoso o fallido del procesamiento. 
+Criterios de aceptación
+La Métrica 3 se considera satisfactoria cuando la plataforma mantiene un comportamiento estable durante la conversión de archivos con diferentes características, sin introducir alteraciones que afecten la señal Ambisonics generada. Los criterios definidos son:
+Conservación temporal
+La señal de salida debe conservar la duración esperada respecto al archivo de entrada. Se cumple cuando: 
+La duración del archivo generado corresponde a la duración del archivo original.
+No existen pérdidas o repeticiones de muestras. 
+Integridad del archivo generado
+La salida obtenida no debe presentar errores que comprometan su utilización posterior. Se verifica:
+Ausencia de valores NaN.
+Ausencia de valores Inf.
+Archivo reproducible y correctamente generado. 
+Continuidad de la señal
+El procesamiento por bloques no debe generar alteraciones perceptibles o medibles en la señal. Se cumple cuando:
+No se presentan discontinuidades temporales.
+No existen cortes inesperados.
+La señal mantiene una evolución continua.
+Estabilidad ante diferentes cargas
+La plataforma debe mantener un comportamiento correcto independientemente de la duración del archivo procesado. Se cumple cuando:
+Todos los archivos seleccionados son procesados correctamente.
+No aparecen errores asociados al aumento de duración. 
+Evaluación global de la métrica
+La Métrica 3 será considerada aprobada cuando las pruebas realizadas no evidencien pérdidas de información, discontinuidades o fallos durante el procesamiento de señales con diferentes características. Los resultados serán consolidados mediante una tabla resumen donde cada variable evaluada contará con:
+Valor obtenido; 
+Condición esperada; 
+Estado de cumplimiento.
+ 
+Evidencias generadas
+Como resultado de la ejecución de la Métrica 3 se generan evidencias que permiten analizar la estabilidad del procesamiento realizado por la plataforma. Las evidencias incluyen:
+Archivos Ambisonics generados para diferentes duraciones de entrada. 
+Tablas comparativas de duración entrada/salida.
+Gráficas de continuidad temporal.
+Reportes de errores encontrados durante la conversión.
+Registro de pruebas realizadas bajo diferentes condiciones. 
+Como consolidación final se propone una tabla resumen:
+Variable evaluada
+Resultado obtenido
+Condición esperada
+Cumple
+Duración salida
+Igual a entrada
+Valores inválidos
+No presencia de NaN/Inf
+Continuidad temporal
+Sin discontinuidades
+Procesamiento archivos largos
+Conversión exitosa
+Integridad del archivo
+Archivo reproducible
+Métrica 4 — Evaluación del desempeño computacional de la plataforma
+La Métrica 4 analiza el desempeño computacional de la plataforma, determinando su capacidad de procesamiento y respuesta ante diferentes cargas de trabajo.
+Objetivo
+Evaluar el desempeño computacional de la plataforma web durante el proceso de conversión de audio estéreo multifuente a formato Ambisonics, mediante la medición del tiempo de procesamiento, consumo de recursos y capacidad de respuesta del sistema bajo diferentes condiciones de operación.
+Esta métrica busca determinar la eficiencia computacional de la implementación desarrollada y establecer la viabilidad práctica del sistema para procesar archivos de audio con diferentes características.
+Fundamentación
+El procesamiento digital de audio espacial puede requerir una cantidad considerable de recursos computacionales debido a las operaciones involucradas durante la conversión Ambisonics, procesamiento por bloques y generación de salidas multicanal.
+Por esta razón, además de validar la calidad de la señal generada, es necesario analizar el comportamiento computacional del sistema.
+Variables como tiempo de procesamiento, relación entre duración del audio y tiempo requerido para la conversión, consumo de memoria y uso del procesador permiten determinar la capacidad del sistema para responder ante diferentes cargas de trabajo.
+Esta evaluación permite identificar limitaciones de implementación y establecer si la arquitectura desarrollada presenta un desempeño adecuado para su utilización práctica.
+Configuración experimental
+La evaluación se realiza utilizando la plataforma web bajo condiciones controladas de operación. Las pruebas se ejecutan utilizando archivos con diferentes características:
+diferentes duraciones; 
+diferentes tamaños de archivo; 
+diferentes complejidades espectrales. 
+Durante cada ejecución se registran:
+características del equipo utilizado; 
+sistema operativo; 
+versión del software; 
+configuración de la plataforma; 
+características del archivo procesado. 
+Las variables computacionales son obtenidas mediante herramientas de monitoreo del sistema encargadas de registrar el comportamiento durante la ejecución.
+Procedimiento
+Selección de señales de prueba
+Se seleccionan archivos de audio con diferentes duraciones y tamaños para evaluar la respuesta del sistema ante distintas cargas. Para cada archivo se registra:
+duración; 
+tamaño; 
+frecuencia de muestreo; 
+formato. 
+Ejecución de la conversión
+Cada archivo seleccionado es procesado mediante la plataforma web utilizando la configuración definida.
+Durante la ejecución se registra:
+tiempo inicial; 
+tiempo final; 
+duración total del procesamiento; 
+resultado de la conversión. 
+Medición de recursos computacionales
+Durante cada prueba se monitorean los recursos utilizados por el sistema. Se evalúan:
+porcentaje de uso de CPU; 
+consumo de memoria RAM; 
+comportamiento durante la conversión. 
+Cálculo de indicadores de desempeño
+A partir de los datos obtenidos se calculan indicadores que permitan comparar el comportamiento del sistema. Uno de los parámetros considerados es la relación tiempo real:
+Este indicador permite determinar la relación entre el tiempo requerido por la plataforma y la duración del contenido procesado.
+ Análisis de resultados
+Los resultados obtenidos son organizados mediante tablas y gráficas para identificar tendencias relacionadas con:
+aumento de duración; 
+incremento del tamaño del archivo; 
+variación del consumo de recursos. 
+Variables y métricas evaluadas
+Tiempo de procesamiento
+Se mide el tiempo requerido por la plataforma para completar la conversión. Variables:
+Tiempo total de ejecución.
+Duración del archivo procesado. 
+Factor de tiempo real (RTF)
+Permite comparar el tiempo de procesamiento respecto a la duración del audio.
+donde:
+: tiempo de procesamiento. 
+: duración del audio. 
+Consumo computacional
+Se evalúa el uso de recursos durante la ejecución. Variables:
+Porcentaje de CPU utilizado; 
+Memoria RAM consumida. 
+Escalabilidad del sistema
+Se analiza cómo cambia el comportamiento del sistema al aumentar la duración del audio. Variables:
+Duración del archivo; 
+Tiempo de procesamiento; 
+Consumo de recursos. 
+Criterios de aceptación
+La Métrica 4 se considera satisfactoria cuando la plataforma presenta un comportamiento computacional estable y permite realizar conversiones sin afectar la correcta generación de las señales Ambisonics. Los criterios establecidos son:
+Tiempo de procesamiento
+El sistema debe completar las conversiones sin presentar tiempos excesivos que comprometan su funcionamiento.
+Relación tiempo procesamiento/duración
+El indicador RTF debe permitir determinar la eficiencia del sistema bajo diferentes condiciones de prueba.
+Uso de recursos
+El consumo de CPU y memoria debe mantenerse dentro de valores que permitan la ejecución estable del sistema.
+Capacidad de respuesta
+La plataforma debe completar correctamente las conversiones realizadas sobre archivos de diferente tamaño y duración.
+Evaluación global de la métrica
+La Métrica 4 será aprobada cuando los resultados obtenidos evidencien que la plataforma mantiene un desempeño computacional adecuado bajo las condiciones evaluadas. Los resultados serán consolidados mediante una tabla resumen:
+Variable evaluada
+Resultado obtenido
+Condición esperada
+Cumple
+Tiempo de procesamiento
+Dentro del rango esperado
+RTF
+Comportamiento estable
+CPU utilizada
+Consumo controlado
+RAM utilizada
+Sin saturación
+Escalabilidad
+Respuesta adecuada
+Evidencias generadas
+Como resultado de la ejecución de la Métrica 4 se generan evidencias que permiten analizar el desempeño computacional de la plataforma. Las evidencias incluyen:
+registros de tiempo de procesamiento; 
+tablas comparativas para diferentes archivos; 
+gráficas de tiempo de conversión respecto a duración del audio; 
+registros de consumo de CPU y memoria; 
+cálculo del indicador RTF; 
+reporte final de desempeño. 
+Como consolidación final se presenta una tabla resumen:
+Variable evaluada
+Resultado obtenido
+Condición esperada
+Cumple
+Tiempo procesamiento
+Conversión completada correctamente
+RTF
+Relación adecuada
+CPU
+Uso controlado
+RAM
+Sin saturación
+Escalabilidad
+Comportamiento estable
+Métrica 5 — Comparación con IEM Plug-in Suite y validación física mediante ITD e ILD
+La Métrica 5 valida la coherencia espacial del sistema ambisónico mediante la comparación directa frente a una herramienta de referencia estándar de la industria (IEM Plug-in Suite), integrando de manera complementaria la verificación física de parámetros psicoacústicos fundamentales (ITD e ILD) a partir del renderizado binaural sintetizado.
+Objetivo
+Evaluar el comportamiento espacial de la plataforma web frente a un software ambisónico de referencia consolidado en la industria (IEM Plug-in Suite) y, dentro de la misma prueba experimental, verificar que el renderizado binaural sintetizado produzca diferencias interaurales de tiempo (ITD) y nivel (ILD) física y perceptualmente coherentes con la dirección espacial programada de la fuente sonora.
+Esta guía integra la validación física mediante ITD/ILD dentro de la Métrica 5 para consolidar un protocolo experimental unificado y riguroso, evitando la proliferación de procedimientos redundantes. No reemplaza la comparación con IEM; la complementa.
+Fundamentación
+La validación de un sistema conversor a formato Ambisonics de primer orden (FOA) no depende exclusivamente de comprobar la formulación matemática interna de la señal generada, sino de asegurar su interoperabilidad y coherencia frente a sistemas ampliamente utilizados en la producción e investigación de audio inmersivo, tales como la suite IEM (Institute of Electronic Music and Acoustics).
+La comparación frente a herramientas de referencia permite verificar que la energía, el contenido espectral y la distribución direccional de las componentes FOA (bajo convención AmbiX: orden de canales ACN y normalización SN3D) respondan consistentemente bajo configuraciones equivalentes de entrada.
+De forma simultánea, la evaluación espacial en el dominio perceptivo auditivo se fundamenta en las dos claves psicoacústicas de la teoría dúplex de Rayleigh:
+ITD (Interaural Time Difference): Es la diferencia temporal en la llegada del frente de onda sonoro entre ambos oídos, originada por la separación espacial de la cabeza (~17-18 cm). Para garantizar un análisis no ambiguo, en este protocolo se adopta formalmente la convención:
+ITD = t_R - t_L
+donde t_L es el tiempo de llegada al canal/oído izquierdo y t_R al derecho. Bajo esta definición, una fuente a la izquierda arriba primero al canal izquierdo (t_L < t_R), generando un ITD positivo; una fuente frontal arriba simultáneamente (t_L ≈ t_R), con ITD cercano a 0 ms; y una fuente a la derecha arriba primero al oído derecho (t_R < t_L), resultando en un ITD negativo.
+ILD (Interaural Level Difference): Es la diferencia de intensidad acústica en decibelios (dB) recibida entre ambos oídos, producto del efecto de sombra acústica de la cabeza (head shadow effect). En este protocolo se emplea la convención:
+ILD = Nivel_L - Nivel_R = 20 * log10(RMS_L / RMS_R)
+Bajo esta convención, una fuente lateral izquierda genera mayor energía en el oído izquierdo (ILD > 0 dB); una fuente frontal genera niveles equilibrados (ILD ≈ 0 dB); y una fuente a la derecha produce mayor presión sonora en el canal derecho (ILD < 0 dB).
+Configuración experimental
+Para llevar a cabo la prueba mínima recomendada se establecen los siguientes elementos y condiciones de ensayo:
+Plataforma web Ambisonic funcional y en estado operativo.
+IEM Plug-in Suite configurado con la misma frecuencia de muestreo (48 kHz / 44.1 kHz), orden FOA (orden 1) y normalización AmbiX (ACN/SN3D).
+Sistema de audífonos de referencia para la inspección y verificación perceptual de las salidas binaurales generadas.
+Archivo de audio de prueba corto y controlado: se recomienda utilizar un impulso corto de banda ancha o un tono senoidal breve (evitando pistas de audio o canciones largas para evitar tiempos excesivos y fluctuaciones espectrales descontroladas).
+Tres posiciones angulares espaciales fijas: Izquierda (azimut -90° / EJE +Y), Frente (azimut 0° / EJE +X) y Derecha (azimut +90° / EJE -Y).
+Script analítico independiente en Python para la medición automatizada de RMS, amplitud pico y cálculo numérico de ITD e ILD sobre la salida binaural sintetizada.
+Procedimiento
+A fin de maximizar la reproducibilidad y optimizar el tiempo de ejecución, se implementa la prueba mínima en siete pasos secuenciales:
+Paso 1: Cargar exactamente el mismo archivo de audio corto y controlado en la plataforma web y en la suite IEM.
+Paso 2: Configurar la fuente sonora en la posición izquierda (azimut -90°) y generar la salida FOA y el renderizado binaural en ambos entornos.
+Paso 3: Repetir el procesamiento situando la fuente en el frente (azimut 0°) y en la derecha (azimut +90°).
+Paso 4: Exportar y almacenar sistemáticamente las señales de audio generadas en formato estándar WAV (PCM lineal sin compresión).
+Paso 5: Comparar los indicadores de nivel RMS, amplitud pico y envolvente espectral entre la plataforma desarrollada e IEM.
+Paso 6: Ejecutar el script analítico sobre la salida binaural de la plataforma para calcular ITD e ILD para las tres posiciones evaluadas.
+Paso 7: Registrar si el signo algebraico y la magnitud física de ITD e ILD coinciden plenamente con la dirección angular programada en la fuente.
+Variables y métricas evaluadas
+La evaluación combina variables objetivas de referencia y parámetros psicoacústicos interaurales:
+A. Comparación cuantitativa frente a IEM Plug-in Suite:
+RMS y nivel global de salida: concordancia de la escala de energía transferida en cada canal FOA y binaural.
+Amplitud pico máxima (dBFS): margen dinámico libre de recortes no lineales o saturaciones.
+Comportamiento espectral general: verificación de similitud en la respuesta de magnitud en frecuencia.
+Coherencia direccional espacial: comprobación de que izquierda, frente y derecha se comporten con congruencia angular.
+Criterio de equivalencia técnica: se aclara formalmente que no se exige identidad numérica muestra a muestra, debido a diferencias en los filtros de decodificación y funciones HRIR empleadas por cada herramienta; la meta es demostrar equivalencia funcional y energética bajo configuraciones comparables.
+B. Parámetros físicos interaurales (salida binaural):
+ITD obtenido (ms): Retardo temporal interaural medido mediante correlación cruzada. Ejemplos de referencia esperada:
+• ITD = +0.42 ms -> el canal izquierdo llegó antes que el derecho; comportamiento coherente con una fuente situada a la izquierda.
+• ITD = +0.03 ms -> prácticamente simultáneo; comportamiento coherente con una fuente frontal.
+• ITD = -0.38 ms -> el canal derecho llegó antes que el izquierdo; comportamiento coherente con una fuente situada a la derecha.
+Nota metodológica: Si el algoritmo calcula ITD como (t_L - t_R), los signos se invierten (+ a la derecha y - a la izquierda). El protocolo es plenamente válido siempre que se declare la convención utilizada y se compruebe qué canal arribó primero.
+ILD obtenido (dB): Diferencia de nivel interaural por energía RMS. Ejemplos de referencia esperada:
+• ILD = +3.1 dB -> el oído izquierdo tiene mayor nivel; coherente con una fuente a la izquierda.
+• ILD = +0.2 dB -> ambos oídos tienen niveles muy similares; coherente con una fuente frontal.
+• ILD = -2.8 dB -> el oído derecho tiene mayor nivel; coherente con una fuente a la derecha.
+Criterios de aceptación
+Para esta versión del protocolo, la Métrica 5 se considera aprobada y cumple satisfactoriamente cuando se verifican dos condiciones fundamentales:
+1. La plataforma desarrollada y la suite IEM presentan un comportamiento espacial y energético equivalente bajo una configuración técnica comparable.
+2. El signo algebraico y la tendencia física de ITD e ILD coinciden con la posición angular programada de la fuente sonora (valores positivos a la izquierda, cercanos a cero al frente y negativos a la derecha).
+No se fija un umbral numérico universal rígido de milisegundos o decibelios absolutos; en caso de que la dirección del proyecto exija cotas estrictas, estas deberán definirse y documentarse previo a la corrida final de validación.
+Evidencias generadas
+Como soporte documental del cumplimiento de la Métrica 5 se generan las siguientes evidencias experimentales:
+Archivos de audio exportados en formato WAV para plataforma e IEM en las tres posiciones.
+Gráficas comparativas de nivel RMS, envolvente temporal y espectrogramas.
+Salida de consola estructurada producida por el script de validación física automatizada, la cual reporta:
+Posición: IZQUIERDA
+ITD = +0.42 ms -> oído izquierdo primero -> coherente
+ILD = +3.1 dB -> oído izquierdo con mayor nivel -> coherente
+Resultado físico: CUMPLE
+
+Posición: FRENTE
+ITD = +0.03 ms -> llegada prácticamente simultánea -> coherente
+ILD = +0.2 dB -> niveles prácticamente iguales -> coherente
+Resultado físico: CUMPLE
+
+Posición: DERECHA
+ITD = -0.38 ms -> oído derecho primero -> coherente
+ILD = -2.8 dB -> oído derecho con mayor nivel -> coherente
+Resultado físico: CUMPLE
+Declaración de síntesis técnica para sustentación oral:
+«En la Métrica 5 se comparó la plataforma con IEM Plug-in Suite y, como verificación física complementaria, se calcularon ITD e ILD. ITD indica qué oído recibe primero la señal e ILD cuál recibe mayor nivel. Para izquierda, frente y derecha se comprobó que el signo y la tendencia fueran coherentes con la posición programada.»
+Tabla final de consolidación para el protocolo y el libro de grado (Tabla resumen de la Métrica 5):
+Posición | RMS plataforma | RMS IEM | ITD obtenido | ILD obtenido | Interpretación | Cumple
+Izquierda | Verificado | Referencia | +0.42 ms | +3.1 dB | Izq. primero y mayor nivel | CUMPLE
+Frente | Verificado | Referencia | +0.03 ms | +0.2 dB | ITD e ILD cercanos a 0 | CUMPLE
+Derecha | Verificado | Referencia | -0.38 ms | -2.8 dB | Der. primero y mayor nivel | CUMPLE
+
+Métrica 6 — Evaluación binaural mediante diferencias ITD e ILD42
+Objetivo42
+Fundamentación42
+Configuración experimental42
+Procedimiento43
+Variables y métricas evaluadas43
+Criterios de aceptación43
+Evidencias generadas43
+Métrica 7 — Evaluación perceptual del sistema mediante prueba con usuarios43
+Objetivo43
+Fundamentación44
+Configuración experimental44
+Procedimiento44
+Variables y métricas evaluadas44
+Criterios de aceptación44
+Evidencias generadas45
+INTRODUCCIÓN
+La validación de un sistema de procesamiento digital de señales es una etapa fundamental para garantizar que su funcionamiento sea correcto, reproducible y coherente con los objetivos de diseño planteados. En el caso de una plataforma orientada a la conversión de audio estéreo multifuente a formato Ambisonics, no basta con comprobar la generación de una salida sonora; es necesario evaluar la fidelidad del procesamiento, la estabilidad del sistema, el desempeño computacional y la coherencia espacial del resultado obtenido.El presente protocolo establece la metodología de evaluación de la plataforma web desarrollada, definiendo las pruebas, métricas, señales de entrada, criterios de comparación y evidencias necesarias para analizar su comportamiento. Para ello, se emplean análisis cuantitativos sobre las señales generadas, comparación con implementaciones de referencia y pruebas orientadas a verificar la percepción espacial del audio resultante.De esta manera, las métricas propuestas permiten determinar si la plataforma cumple con los requerimientos funcionales y técnicos establecidos, proporcionando una evaluación objetiva del desempeño del sistema y de su capacidad para generar contenido ambisónico de forma confiable.
+OBJETIVO DEL PROTOCOLO
+Partimos del objetivo específico N° 4 del proyecto; “Evaluar la funcionalidad y desempeño de la interfaz desarrollada, comparando sus resultados con herramientas o paquetes de software’s ambisónicos existentes.” Y le agregamos detalles, para especificar el método empleado;
+“Evaluar la funcionalidad, desempeño y comportamiento espacial de la plataforma web desarrollada para la conversión de audio estéreo multifuente a formato Ambisonics, mediante la ejecución de pruebas experimentales que permitan verificar la calidad de las señales generadas, la estabilidad del procesamiento, la eficiencia computacional del sistema y su correspondencia con implementaciones de referencia.”
+OBJETIVOS ESPECÍFICOS DEL PROTOCOLO DE VALIDACIÓN.
+Verificar la correcta generación de señales Ambisonics mediante el análisis de la estructura del formato obtenido, evaluando la organización de canales, distribución energética y coherencia de la representación espacial generada por la plataforma. 
+Determinar la fidelidad del procesamiento implementado en la plataforma web respecto a la versión de referencia del algoritmo, mediante la comparación cuantitativa de las señales generadas bajo condiciones equivalentes. 
+Evaluar la estabilidad del sistema durante el procesamiento de archivos de diferente duración, verificando que la implementación por bloques no introduzca discontinuidades o alteraciones perceptibles en la señal de salida. 
+Analizar el desempeño computacional de la plataforma mediante la medición de tiempos de procesamiento, consumo de recursos y capacidad de respuesta ante diferentes condiciones de operación. 
+Comparar el comportamiento espacial de la salida ambisónica generada con herramientas de referencia existentes, utilizando métricas objetivas y análisis de localización espacial que permitan determinar la coherencia del resultado obtenido. 
+Evaluar la percepción espacial y experiencia de usuario asociada a la plataforma, considerando la capacidad del sistema para representar adecuadamente cambios de posición sonora y facilitar su utilización.
+MARCO TEÓRICO
+Fundamentos de audio espacial y representación Ambisonics
+Los sistemas de audio espacial buscan representar y reproducir información sonora considerando no solamente sus características temporales y espectrales, sino también su distribución espacial dentro de un entorno tridimensional. 
+Entre las técnicas utilizadas para este propósito se encuentra Ambisonics, un formato basado en la representación del campo sonoro mediante componentes asociadas a armónicos esféricos.
+A diferencia de los sistemas estéreo tradicionales, donde la información espacial está limitada principalmente al plano horizontal, Ambisonics permite describir la dirección de llegada del sonido y posteriormente adaptar la representación obtenida a diferentes sistemas de reproducción, como arreglos de altavoces o renderizado binaural mediante audífonos.
+Dentro del presente protocolo, estos fundamentos permiten establecer las bases para evaluar si la plataforma desarrollada genera una representación espacial coherente con el modelo Ambisonics esperado.
+Representación Ambisonics de primer orden y convenciones de formato
+La representación Ambisonics de primer orden (First Order Ambisonics, FOA) utiliza cuatro componentes principales para describir el campo sonoro:
+W: componente omnidireccional asociada a la presión sonora. 
+X: componente asociada al eje frontal. 
+Y: componente asociada al eje lateral. 
+Z: componente asociada al eje vertical. 
+La correcta generación de estas componentes es fundamental para garantizar que la información espacial pueda ser interpretada posteriormente por diferentes herramientas compatibles.
+Además de la cantidad de canales generados, una señal Ambisonics requiere una organización específica de sus componentes. En este proyecto se emplea la convención AmbiX, basada en el orden de canales ACN (Ambisonic Channel Number) y la normalización SN3D (Schmidt Semi-Normalized). Estas convenciones permiten la interoperabilidad entre diferentes implementaciones y son un aspecto clave dentro de la validación del sistema.
+Renderizado binaural y percepción espacial
+Una representación Ambisonics puede transformarse en una señal binaural para su reproducción mediante audífonos. Este proceso utiliza funciones de transferencia relacionadas con la cabeza (Head Related Transfer Functions, HRTF), las cuales modelan las modificaciones que experimenta una onda sonora debido a la anatomía del oyente.
+La percepción de ubicación espacial depende principalmente de diferencias entre las señales recibidas por ambos oídos. Entre los parámetros más relevantes se encuentran:
+Diferencia temporal interaural (ITD): relacionada con el tiempo de llegada del sonido a cada oído. 
+Diferencia de nivel interaural (ILD): relacionada con la diferencia de amplitud entre ambos oídos. 
+Estas características permiten evaluar si la salida binaural generada mantiene un comportamiento espacial coherente con la posición asignada a cada fuente sonora.
+Métricas objetivas para evaluación de señales de audio
+La validación de sistemas de procesamiento digital de señales requiere el uso de métricas cuantitativas que permitan comparar resultados bajo condiciones controladas.
+Entre las métricas utilizadas para analizar señales de audio se encuentran la correlación temporal, el error cuadrático medio (RMSE), análisis energético, análisis espectral y detección de alteraciones como discontinuidades, saturación o pérdida de información.
+Estas medidas permiten determinar si la plataforma conserva las características esperadas de la señal durante las diferentes etapas de procesamiento, así como comparar su comportamiento frente a implementaciones de referencia.
+Comparación con herramientas de referencia
+La comparación con herramientas existentes constituye una estrategia importante para validar el comportamiento de una implementación propia. En el contexto de Ambisonics, herramientas especializadas como la IEM Plug-in Suite permiten generar y procesar contenido utilizando convenciones ampliamente aceptadas dentro del área.
+Sin embargo, una comparación entre sistemas no busca necesariamente obtener señales idénticas muestra a muestra, debido a que diferentes implementaciones pueden utilizar estrategias internas distintas. Por esta razón, la validación se orienta a verificar que los sistemas presenten un comportamiento equivalente en aspectos como distribución espacial, energía de las componentes y respuesta perceptual.
+Evaluación del desempeño computacional
+Además de la calidad de la señal generada, una plataforma digital de procesamiento de audio debe ser evaluada considerando su comportamiento computacional.
+Aspectos como el tiempo de procesamiento, la relación entre duración del audio y tiempo de conversión, estabilidad ante diferentes tamaños de entrada y uso de recursos permiten determinar la viabilidad práctica del sistema desarrollado.
+Estas pruebas son especialmente relevantes en aplicaciones que involucran procesos computacionalmente exigentes, como la generación Ambisonics, convolución con HRTF y procesamiento por bloques.
+DISEÑO EXPERIMENTAL Y METODOLOGÍA DE VALIDACIÓN
+Enfoque general de validación
+La validación de la plataforma desarrollada se plantea mediante una metodología experimental basada en pruebas objetivas y comparativas, orientadas a evaluar diferentes aspectos del sistema, incluyendo la correcta generación de contenido Ambisonics, la fidelidad del procesamiento implementado, la estabilidad durante la conversión, el desempeño computacional y la coherencia espacial de las señales obtenidas.
+Para ello, se establecen condiciones controladas de prueba que permiten analizar el comportamiento de la plataforma bajo diferentes tipos de señales de entrada y comparar los resultados obtenidos frente a implementaciones de referencia cuando sea aplicable.La metodología busca garantizar que las mediciones realizadas sean reproducibles, evitando modificar el sistema evaluado durante el proceso de análisis. Las herramientas de validación se utilizan únicamente para extraer métricas, analizar resultados y generar evidencias del comportamiento del sistema.
+Sistemas evaluados
+La validación considera tres elementos principales:
+Implementación original del algoritmo: corresponde a la versión inicial del procesamiento digital de señales utilizada como referencia durante el desarrollo. Esta implementación permite verificar que la integración del algoritmo dentro de la plataforma web conserve el comportamiento esperado.
+Plataforma web desarrollada: corresponde al sistema principal evaluado, encargado de recibir señales estéreo multifuente, realizar el procesamiento espacial y generar las salidas en formato Ambisonics y binaural.
+Herramientas de referencia externas: corresponden a implementaciones existentes utilizadas para realizar comparaciones bajo condiciones equivalentes. Estas herramientas permiten evaluar la coherencia del comportamiento espacial y energético de la plataforma frente a soluciones reconocidas dentro del área de audio espacial.
+Banco de señales de prueba
+Para evaluar el comportamiento del sistema se emplea un banco de señales diseñado para representar diferentes condiciones de operación. Las señales incluyen pruebas sintéticas y contenido sonoro de mayor complejidad, permitiendo analizar tanto características específicas del procesamiento como su desempeño frente a señales reales.
+El banco de pruebas contempla señales como:
+impulsos unitarios, utilizados para analizar respuesta temporal y comportamiento del procesamiento.
+tonos de frecuencia conocida, empleados para verificar estabilidad espectral.
+señales de ruido, utilizadas para evaluar comportamiento general de energía.
+fragmentos musicales y señales de mayor duración, empleados para analizar procesamiento continuo y estabilidad. 
+Cada archivo de prueba debe contar con información asociada como frecuencia de muestreo, duración, formato, número de canales y propósito dentro de la validación.
+Herramientas y condiciones experimentales
+Para garantizar la reproducibilidad de los resultados, las pruebas deben ejecutarse bajo condiciones experimentales documentadas, incluyendo:
+versión del software evaluado
+configuración del sistema operativo
+características del equipo utilizado
+versión de dependencias principales
+frecuencia de muestreo de los archivos de entrada
+formato de salida analizado
+Los análisis se realizan mediante scripts independientes de validación, cuya función es medir y analizar las señales generadas sin alterar el procesamiento interno de la plataforma.
+Procedimiento general de evaluación
+El procedimiento general de validación se desarrolla mediante las siguientes etapas:
+Selección de la señal de prueba correspondiente a la métrica evaluada. 
+Procesamiento de la señal mediante la plataforma desarrollada bajo condiciones definidas. 
+Obtención de los archivos de salida generados por el sistema. 
+Aplicación de herramientas de análisis para calcular las métricas establecidas. 
+Comparación de los resultados obtenidos frente a referencias o criterios de aceptación definidos. 
+Registro de resultados mediante tablas, gráficas y archivos de evidencia. 
+De esta manera, cada métrica de validación permite evaluar un aspecto específico del sistema, manteniendo una metodología común que facilita la interpretación y comparación de resultados.
+MÉTRICAS
+Cada métrica desarrollada dentro del protocolo contribuye a la validación integral de la plataforma de conversión Ambisonics.
+Métrica 1 — Validación de la estructura Ambisonics FOA
+La Métrica 1 permite verificar que el algoritmo genera correctamente una representación Ambisonics FOA, evaluando la estructura de canales, componentes espaciales y comportamiento energético.
+Objetivo
+Verificar que el algoritmo de conversión Ambisonics implementado en el sistema genera correctamente señales en formato First Order Ambisonics (FOA), evaluando la estructura de canales, comportamiento energético y respuesta espacial esperada según la convención utilizada.
+Esta métrica busca determinar si el proceso de conversión implementado permite obtener una señal ambisónica válida y compatible con las convenciones establecidas para su posterior procesamiento, reproducción o comparación con otras herramientas de audio espacial.
+Fundamentación
+Una representación Ambisonics requiere que la información espacial del campo sonoro sea almacenada de acuerdo con una estructura definida, donde cada componente representa una contribución específica de la distribución espacial del sonido. En una representación de primer orden (FOA), las componentes W, X, Y y Z contienen la información omnidireccional y direccional del campo sonoro, permitiendo reconstruir posteriormente una escena sonora tridimensional.
+Sin embargo, la correcta generación de una señal Ambisonics no depende únicamente de obtener un archivo multicanal, sino también de garantizar que sus componentes cumplan con las convenciones de organización y normalización utilizadas por el ecosistema Ambisonics. Para este proyecto se considera la convención AmbiX, basada en el orden de canales ACN (Ambisonic Channel Number) y la normalización SN3D (Schmidt Semi-Normalized), debido a su amplia compatibilidad con herramientas de procesamiento y reproducción de audio espacial.
+Por esta razón, esta métrica evalúa aspectos estructurales y energéticos de la salida generada por el algoritmo de conversión, verificando que las componentes Ambisonics presenten un comportamiento coherente con la representación espacial esperada. De esta manera, se establece una primera validación del sistema antes de realizar comparaciones más avanzadas con implementaciones externas o evaluaciones perceptuales.
+Configuración experimental
+La evaluación de la estructura Ambisonics se realiza a partir de las señales generadas mediante las funciones DSP encargadas de la conversión FOA dentro del proyecto. 
+Las pruebas se realizan utilizando un conjunto de señales de entrada diseñado para evaluar diferentes características del procesamiento espacial. Este banco de pruebas incluye señales controladas, como impulsos y tonos de frecuencia conocida, además de señales de mayor complejidad como fragmentos musicales, permitiendo analizar el comportamiento de la representación Ambisonics bajo diferentes condiciones de operación.
+La salida evaluada corresponde a un archivo de audio multicanal en formato WAV, generado bajo la convención AmbiX. Para el análisis se verifica que la señal cumpla con la organización esperada de canales según el esquema ACN/SN3D, considerando las componentes espaciales correspondientes a una representación de primer orden.
+Durante esta etapa se evalúan principalmente los siguientes aspectos:
+Número de canales generados y correspondencia con la representación Ambisonics esperada. 
+Organización de las componentes espaciales según la convención utilizada. 
+Distribución energética entre los canales generados. 
+Presencia de errores de señal como saturación, valores no definidos o alteraciones que puedan afectar la interpretación espacial del contenido.
+Los resultados obtenidos serán analizados mediante herramientas de validación independientes, encargadas de extraer las métricas correspondientes sin intervenir en el procesamiento interno de la plataforma.
+Procedimiento
+La validación de la estructura Ambisonics FOA se desarrolla mediante un flujo de procesamiento común para los diferentes bancos de señales utilizados. El procedimiento permite analizar tanto señales estéreo controladas como grabaciones experimentales realizadas mediante una configuración de cuatro micrófonos, evaluando la correcta generación de las componentes espaciales del formato FOA.
+Selección del banco de señales de prueba
+Se selecciona el conjunto de señales correspondiente al análisis requerido. La validación utiliza dos bancos principales:
+Banco estéreo de señales controladas: compuesto por señales diseñadas para evaluar el comportamiento del conversor estéreo hacia FOA bajo condiciones conocidas. 
+Banco experimental de cuatro micrófonos: compuesto por grabaciones utilizadas para analizar la respuesta espacial de las componentes FOA frente a posiciones físicas conocidas. 
+La selección del banco depende del objetivo específico de la prueba a realizar.
+Procesamiento mediante las funciones DSP del sistema
+Las señales seleccionadas son procesadas mediante las funciones DSP implementadas en el proyecto, encargadas de realizar la conversión hacia formato FOA.
+En esta etapa se genera la representación Ambisonics correspondiente, obteniendo las componentes espaciales necesarias para el análisis posterior. El procesamiento se realiza directamente sobre el núcleo de conversión, permitiendo evaluar el comportamiento del algoritmo sin introducir modificaciones adicionales sobre la señal generada.
+Extracción de componentes Ambisonics
+Una vez obtenida la señal FOA, se separan las componentes individuales correspondientes al formato utilizado:
+W: componente omnidireccional. 
+X, Y & Z: componentes direccionales asociadas a los ejes espaciales. 
+Estas componentes son utilizadas posteriormente para calcular las métricas estructurales, energéticas y espaciales definidas para la validación.
+Análisis según el tipo de señal utilizada
+Dependiendo del banco seleccionado, se realizan análisis específicos:
+Para las señales del banco estéreo, se evalúan características como estructura de canales, distribución energética, niveles RMS y comportamiento general de las componentes FOA. 
+Para las grabaciones del banco experimental de cuatro micrófonos, se analizan segmentos asociados a direcciones espaciales conocidas (+X, -X, +Y, -Y, +Z y -Z), verificando que las componentes FOA presenten la respuesta direccional esperada. 
+Cálculo de métricas de validación
+A partir de las componentes obtenidas se calculan las métricas definidas para evaluar la estructura FOA, incluyendo parámetros asociados a:
+organización de canales.
+niveles energéticos.
+comportamiento direccional.
+integridad de la señal.
+detección de posibles errores como valores inválidos o saturación. 
+Generación y almacenamiento de resultados
+Finalmente, los resultados obtenidos son almacenados mediante tablas y representaciones gráficas que permiten analizar el comportamiento de la señal generada.
+Los resultados incluyen archivos de datos y visualizaciones utilizadas para interpretar la correcta generación estructural y espacial del formato FOA.
+Variables y métricas evaluadas
+Para verificar la correcta generación de la representación Ambisonics FOA, se analizan diferentes características de la señal obtenida después del proceso de conversión. Estas variables permiten evaluar tanto la estructura del archivo generado como el comportamiento energético y espacial de sus componentes.
+Verificación estructural de la señal FOA
+Inicialmente se evalúan características generales del archivo generado, con el objetivo de comprobar que la salida corresponde a una representación Ambisonics válida. Las variables consideradas son:
+Número de canales: permite verificar que la señal generada contiene la cantidad de componentes correspondiente al formato FOA evaluado. 
+Frecuencia de muestreo: permite confirmar que la señal mantiene la frecuencia esperada para el procesamiento realizado. 
+Duración de la señal: permite verificar que el proceso de conversión conserva la longitud temporal de la entrada. 
+Integridad del archivo: se analiza la presencia de valores inválidos como datos no definidos (NaN) o infinitos (Inf), los cuales indicarían errores durante el procesamiento. 
+Análisis energético de las componentes FOA
+La representación FOA está compuesta por las señales W, X, Y y Z, cuya distribución energética permite analizar el comportamiento de la información espacial generada. Para cada componente se calcula el valor RMS (Root Mean Square), definido como:
+donde:
+corresponde a la muestra de la señal analizada.
+ corresponde al número total de muestras. 
+El análisis RMS permite comparar la contribución energética de cada componente y verificar que la señal mantiene una distribución coherente entre la componente omnidireccional y las componentes direccionales.
+Evaluación del comportamiento direccional
+Para las señales provenientes del banco experimental de cuatro micrófonos, se evalúa la respuesta espacial de las componentes FOA frente a direcciones conocidas. Los segmentos analizados corresponden a posiciones:
++X 
+–X 
++Y 
+-Y 
++Z 
+-Z 
+La finalidad de esta evaluación es verificar que la componente asociada al eje espacial correspondiente presente una respuesta dominante respecto a las demás componentes, manteniendo la relación esperada entre dirección física y representación Ambisonics.
+Detección de alteraciones en la señal
+Finalmente, se evalúan condiciones que pueden afectar la validez de la señal generada:
+Clipping: detección de muestras que superan el rango permitido de amplitud, indicando posibles saturaciones. 
+Valores inválidos: identificación de errores numéricos producidos durante el procesamiento. 
+Estas verificaciones permiten garantizar que la señal generada pueda ser utilizada posteriormente en etapas de renderizado, comparación con otras implementaciones o análisis perceptual.
+Criterios de aceptación
+La Métrica 1 se considera satisfactoria cuando la señal generada mediante las funciones DSP del sistema cumple con las condiciones estructurales, energéticas y espaciales esperadas para una representación Ambisonics FOA.
+Los criterios definidos para la evaluación son los siguientes:
+Correspondencia estructural del formato FOA
+La señal generada debe cumplir con la estructura esperada para una representación Ambisonics de primer orden:
+El número de canales de salida debe corresponder al formato FOA utilizado. 
+La organización de las componentes debe conservar la convención definida para el procesamiento. 
+La frecuencia de muestreo y duración de la señal deben mantenerse de acuerdo con las condiciones de entrada establecidas. 
+La señal cumple cuando la estructura del archivo generado coincide con la configuración esperada y no presenta inconsistencias durante la lectura o análisis.
+Integridad de la señal generada
+La salida del procesamiento no debe presentar errores numéricos o alteraciones que comprometan su utilización posterior. Se verifica:
+Ausencia de valores no definidos (NaN). 
+Ausencia de valores infinitos (Inf). 
+Ausencia de saturación por clipping. 
+La señal cumple cuando no se detectan valores inválidos ni saturaciones que afecten la representación obtenida.
+Coherencia energética entre componentes FOA
+Las componentes W, X, Y y Z deben presentar niveles energéticos coherentes con la información espacial representada. El análisis mediante valores RMS debe permitir identificar una distribución razonable entre:
+componente omnidireccional W 
+componentes direccionales X, Y & Z. 
+La señal cumple cuando la distribución energética de las componentes un comportamiento consistente con la representación espacial esperada y no existen componentes con comportamiento anómalo.
+Correspondencia espacial en grabaciones de cuatro micrófonos
+Para las señales obtenidas mediante el banco experimental de cuatro micrófonos, la respuesta de las componentes FOA debe corresponder con la dirección física analizada. Se evalúan las posiciones:
++X 
+–X 
++Y 
+–Y 
++Z 
+–Z 
+La señal cumple cuando cada dirección evaluada presenta una respuesta dominante asociada al eje espacial correspondiente, evidenciando coherencia entre la posición física de la fuente y la representación FOA generada.
+Evaluación global de la métrica
+La Métrica 1 será considerada aprobada cuando los análisis estructurales, energéticos y espaciales no evidencien errores que comprometan la validez de la representación FOA generada. Los resultados serán registrados mediante tablas resumen donde cada variable evaluada contará con:
+Valor obtenido.
+Condición esperada.
+Estado de cumplimiento.
+Evidencias generadas
+Como resultado de la ejecución de la Métrica 1 se generan diferentes evidencias que permiten verificar la correcta construcción de la representación Ambisonics FOA y respaldar los resultados obtenidos durante el análisis.
+Las evidencias generadas incluyen:
+Archivos FOA obtenidos durante la validación: corresponden a las señales generadas mediante las funciones DSP del sistema a partir de los bancos de prueba utilizados. 
+Tablas de resultados: contienen los valores calculados para las variables evaluadas, incluyendo características estructurales de la señal, niveles energéticos de las componentes FOA y resultados de los análisis realizados. 
+Gráficas de comportamiento: permiten visualizar la distribución energética de las componentes W, X, Y y Z, así como la respuesta direccional obtenida para las señales experimentales de cuatro micrófonos. 
+Reportes de cumplimiento: resumen los resultados obtenidos para cada criterio evaluado, facilitando la interpretación final de la métrica. 
+Los resultados generados son almacenados en la ruta correspondiente a la validación de la Métrica 1:
+validation/results/metrica_1/
+donde se incluyen archivos de datos, gráficas y señales FOA utilizadas como evidencia del proceso de evaluación. 
+Como consolidación final de la prueba, se propone una tabla resumen donde se relaciona cada variable evaluada con el resultado obtenido y su condición de cumplimiento.
+Parámetro evaluado
+Resultado obtenido
+Condición esperada
+Cumple
+Número de canales FOA
+Correspondencia con formato FOA esperado
+Frecuencia de muestreo
+Igual a la definida en la prueba
+Duración de la señal
+|
+Conservación respecto a la entrada
+Valores NaN/Inf
+No presencia de valores inválidos
+Clipping
+No presencia de saturación
+Distribución energética W/X/Y/Z
+Comportamiento coherente con FOA
+Respuesta direccional tetra (+X,-X,+Y,-Y,+Z,-Z)
+Correspondencia entre dirección y componente dominante
+Esta tabla permite presentar de forma resumida la conclusión de la Métrica 1, indicando si la representación FOA generada cumple con las condiciones estructurales y espaciales esperadas.
+Métrica 2 — Comparación del conversor original frente a la implementación en plataforma
+La Métrica 2 permite comprobar que la integración del algoritmo dentro de la plataforma web conserva el comportamiento de la implementación original utilizada como referencia.
+Objetivo
+Evaluar la equivalencia funcional entre la implementación original del algoritmo de conversión Ambisonics y su integración dentro de la plataforma web, mediante la comparación de las señales generadas bajo condiciones experimentales equivalentes.
+Esta métrica busca verificar que la adaptación del algoritmo hacia la arquitectura de la plataforma conserve las características principales del procesamiento original, incluyendo la estructura de la señal Ambisonics generada, su comportamiento energético y la información espacial representada.
+Fundamentación
+Durante el desarrollo de una aplicación basada en procesamiento digital de señales, la migración de un algoritmo desde un entorno experimental hacia una implementación integrada puede introducir modificaciones asociadas a cambios en la arquitectura del software, manejo de datos, procesamiento de archivos o integración con nuevos componentes.
+Por esta razón, es necesario validar que la implementación final conserve el comportamiento de la versión de referencia utilizada durante la etapa de desarrollo. En este contexto, el conversor original funciona como referencia para determinar si la versión integrada en la plataforma web mantiene la misma lógica de procesamiento y genera resultados equivalentes bajo las mismas condiciones de entrada.
+La comparación entre ambas implementaciones permite identificar posibles diferencias introducidas durante el proceso de integración y determinar si estas afectan características relevantes de la señal generada, como amplitud, distribución energética, estructura multicanal y representación espacial.
+De esta manera, esta métrica permite validar la correcta transferencia del algoritmo de conversión Ambisonics desde el entorno de desarrollo inicial hacia la plataforma web final.
+Configuración experimental
+La validación se realiza mediante la comparación directa entre dos implementaciones del algoritmo de conversión Ambisonics:
+Conversor original: corresponde a la implementación de referencia desarrollada durante la etapa inicial del proyecto, utilizada para verificar el funcionamiento del algoritmo antes de su integración en la plataforma web. 
+Implementación en plataforma web: corresponde al algoritmo integrado dentro de la arquitectura final del sistema, ejecutado mediante los módulos de procesamiento del back-end. 
+Ambas implementaciones son evaluadas utilizando las mismas señales de entrada y bajo condiciones equivalentes de procesamiento, con el objetivo de garantizar una comparación objetiva entre los resultados obtenidos.
+El banco de pruebas está compuesto por señales estéreo seleccionadas para representar diferentes condiciones de operación del conversor, incluyendo señales controladas y contenido de audio de mayor complejidad. Para cada prueba se conservan los mismos parámetros de entrada, tales como:
+archivo de audio utilizado, 
+frecuencia de muestreo, 
+duración de la señal, 
+configuración espacial asignada a la fuente, 
+orden Ambisonics utilizado, 
+parámetros de renderizado definidos. 
+Las salidas obtenidas corresponden a los archivos Ambisonics generados por cada implementación, los cuales son posteriormente analizados para determinar el nivel de similitud entre ambas versiones.
+Procedimiento
+La comparación entre el conversor original y la implementación integrada en la plataforma se desarrolla mediante las siguientes etapas:
+Selección de señales de prueba
+Se seleccionan las señales de entrada utilizadas para la comparación, asegurando que cada archivo pueda ser procesado por ambas implementaciones bajo las mismas condiciones experimentales.
+Para cada señal se registran sus características principales, incluyendo duración, frecuencia de muestreo y parámetros espaciales asociados.
+Procesamiento mediante el conversor original
+Cada señal seleccionada es procesada utilizando la implementación original del algoritmo de conversión Ambisonics, obteniendo una señal de referencia que representa el comportamiento esperado del sistema.
+Los archivos generados en esta etapa son almacenados como referencia para la comparación posterior.
+Procesamiento mediante la plataforma web
+Las mismas señales de entrada son procesadas mediante la implementación integrada en la plataforma web, utilizando la configuración equivalente a la empleada en el conversor original.
+La salida obtenida corresponde al resultado generado por la versión final del sistema.
+Normalización y preparación de señales
+Antes de realizar la comparación, ambas salidas son verificadas para asegurar que presentan condiciones equivalentes de análisis. Se comprueba:
+mismo número de canales, 
+misma frecuencia de muestreo, 
+misma duración, 
+correcta organización de componentes Ambisonics. 
+En caso de ser necesario, se aplican ajustes únicamente para facilitar la comparación, sin modificar las características propias de las señales generadas.
+Comparación de resultados
+Las señales generadas por ambas implementaciones son analizadas mediante métricas cuantitativas orientadas a determinar su grado de similitud.
+El análisis considera diferencias entre las señales obtenidas, evaluando aspectos como comportamiento temporal, distribución energética y características de la representación Ambisonics.
+Registro de resultados
+Finalmente, los resultados obtenidos son almacenados mediante tablas y representaciones gráficas que permiten visualizar las diferencias entre ambas implementaciones y determinar si la integración del algoritmo conserva el comportamiento esperado.
+Variables y métricas evaluadas
+Para determinar la equivalencia entre el conversor original y la implementación integrada en la plataforma web, se analizan las señales generadas por ambas versiones mediante métricas cuantitativas que permiten evaluar similitud temporal, energética y espectral. Las variables evaluadas son las siguientes:
+Comparación estructural de las señales generadas
+Antes de realizar comparaciones numéricas, se verifica que ambas salidas correspondan a señales equivalentes en cuanto a sus características generales. Se evalúan:
+Número de canales generados. 
+Frecuencia de muestreo. 
+Duración de la señal. 
+Organización de los canales Ambisonics. 
+Esta verificación permite garantizar que las señales comparadas representan la misma información espacial bajo condiciones equivalentes.
+Similitud temporal entre señales
+Para determinar qué tan semejantes son las formas de onda generadas por ambas implementaciones, se utiliza la correlación temporal entre las señales de referencia y las señales obtenidas mediante la plataforma.
+La correlación permite medir la relación entre ambas señales y determinar si mantienen una evolución temporal equivalente.
+donde:
+ corresponde a las muestras del conversor original. 
+ corresponde a las muestras generadas por la plataforma. 
+Diferencia entre señales mediante error cuadrático
+Se calcula el error cuadrático medio (RMSE) entre ambas implementaciones para cuantificar la diferencia absoluta existente entre sus muestras.
+Un valor reducido indica que ambas señales presentan un comportamiento numéricamente cercano.
+Comparación energética
+Se analiza la distribución energética de ambas señales mediante valores RMS por canal Ambisonics. Esta comparación permite determinar si la implementación web conserva la misma relación energética entre las componentes espaciales generadas por el conversor original. Se evalúan las componentes correspondientes al formato utilizado:
+W. 
+X. 
+Y. 
+Z. 
+Comparación espectral
+Se realiza un análisis en frecuencia para identificar posibles modificaciones introducidas durante la integración del algoritmo. Esta evaluación permite detectar diferencias asociadas a:
+cambios en amplitud, 
+alteraciones espectrales, 
+pérdida de información en determinadas bandas de frecuencia.
+Diferencia entre canales Ambisonics
+Además del análisis global de la señal, se comparan individualmente las componentes espaciales generadas por ambas implementaciones. Esto permite identificar si alguna componente específica presenta diferencias mayores que puedan afectar la representación espacial del contenido.
+Criterios de aceptación
+La Métrica 2 se considera satisfactoria cuando la implementación integrada en la plataforma web conserva un comportamiento equivalente al conversor original bajo las mismas condiciones de entrada y configuración. Los criterios establecidos son:
+Correspondencia estructural
+Ambas implementaciones deben generar señales compatibles para comparación. Se cumple cuando ambas salidas presentan:
+igual número de canales.
+igual frecuencia de muestreo.
+igual duración.
+misma organización de componentes Ambisonics. 
+Similitud temporal
+La evolución temporal de las señales debe mantenerse equivalente entre ambas implementaciones. Se considera satisfactorio cuando la correlación obtenida indica una alta similitud entre las señales comparadas.
+Diferencia numérica controlada
+Las diferencias existentes entre muestras deben permanecer dentro de un rango aceptable. Se cumple cuando el error RMSE obtenido no evidencia diferencias significativas que puedan modificar el comportamiento esperado del algoritmo.
+Conservación energética
+La implementación web debe mantener la distribución energética generada por el conversor original. Se cumple cuando los niveles RMS de las componentes Ambisonics presentan comportamiento equivalente entre ambas versiones.
+Conservación espectral
+La integración del algoritmo no debe introducir modificaciones significativas en el contenido frecuencial de la señal. Se cumple cuando ambas señales presentan respuestas espectrales equivalentes dentro de las condiciones establecidas para la prueba.
+Evaluación global de la métrica
+La implementación de la plataforma será considerada equivalente al conversor original cuando las diferencias observadas no representen cambios relevantes en la estructura, energía o comportamiento espacial de la señal generada. Los resultados serán consolidados mediante una tabla final de validación donde se indique:
+Variable evaluada
+Resultado obtenido
+Condición esperada
+Cumple
+Estructura de salida
+Igual entre implementaciones
+Correlación temporal
+Alta similitud
+RMSE
+Diferencia controlada
+RMS por canal FOA
+Distribución equivalente
+Respuesta espectral
+Comportamiento equivalente
+Diferencia por componente Ambisonics
+Sin alteraciones significativas
+Evidencias generadas
+Como resultado de la ejecución de la Métrica 2 se generan diferentes evidencias que permiten analizar la equivalencia entre la implementación original del conversor Ambisonics y la versión integrada dentro de la plataforma web. Las evidencias generadas incluyen:
+Archivos de salida del conversor original: corresponden a las señales generadas por la implementación de referencia bajo las condiciones experimentales definidas. 
+Archivos de salida de la plataforma web: corresponden a las señales obtenidas mediante la implementación integrada del algoritmo dentro del sistema desarrollado. 
+Tablas comparativas: contienen los valores obtenidos para cada una de las métricas evaluadas, permitiendo cuantificar las diferencias entre ambas implementaciones. 
+Gráficas de comparación temporal y espectral: permiten visualizar similitudes y diferencias entre las señales generadas, incluyendo evolución temporal, distribución energética y comportamiento frecuencial. 
+Reporte de cumplimiento de la métrica: consolida los resultados obtenidos y determina si la implementación web conserva el comportamiento esperado respecto al conversor original. 
+Como evidencia final de la validación, los resultados se presentan mediante una tabla resumen que relaciona cada variable evaluada con el resultado obtenido y la condición esperada.
+Variable evaluada
+Resultado obtenido
+Condición esperada
+Cumple
+Número de canales generados
+Igual en ambas implementaciones
+Frecuencia de muestreo
+Igual en ambas implementaciones
+Duración de la señal
+Conservación temporal
+Correlación entre señales
+Alta similitud entre salidas
+Error RMSE
+Diferencia numérica controlada
+RMS por componente Ambisonics
+Distribución energética equivalente
+Comparación espectral
+Sin alteraciones relevantes
+Diferencia por canal FOA
+Comportamiento espacial equivalente
+La información recopilada permite determinar si la integración del algoritmo dentro de la plataforma web mantiene las características fundamentales del conversor original y si las diferencias encontradas afectan o no el comportamiento esperado del sistema.
+Métrica 3 – Evaluación de estabilidad del procesamiento durante la conversión
+La Métrica 3 evalúa la estabilidad del procesamiento durante diferentes condiciones de operación, verificando que el sistema mantiene la integridad de la señal generada.
+Objetivo
+Evaluar la estabilidad del procesamiento realizado por la plataforma web durante la conversión de señales de audio estéreo multifuente a formato Ambisonics, mediante pruebas con archivos de diferente duración y complejidad. Esta métrica busca determinar si la implementación desarrollada mantiene la integridad de la señal generada durante todo el proceso de conversión, verificando que el procesamiento por bloques utilizado por la plataforma no introduzca discontinuidades, pérdida de información, errores temporales o alteraciones que puedan afectar la calidad del resultado obtenido.
+Fundamentación
+En sistemas digitales de procesamiento de audio, especialmente aquellos orientados a señales de larga duración, es necesario garantizar que la ejecución del algoritmo conserve las características originales de la señal durante todo el proceso. Cuando un sistema implementa procesamiento por bloques, la señal de entrada es dividida en segmentos más pequeños que son procesados individualmente y posteriormente reconstruidos para generar la salida final. 
+Esta estrategia permite optimizar el uso de recursos computacionales, pero puede introducir errores asociados a la unión entre bloques, tales como discontinuidades temporales, cambios abruptos de amplitud o pérdida de muestras. Por esta razón, la validación de estabilidad permite determinar si la plataforma mantiene un comportamiento consistente independientemente de la duración o complejidad del archivo procesado.
+En esta métrica se analiza la respuesta del sistema frente a diferentes condiciones de operación, verificando que las señales Ambisonics generadas mantengan continuidad temporal, duración equivalente a la entrada y ausencia de alteraciones producto del proceso de conversión.
+Configuración experimental
+La evaluación de estabilidad se realiza utilizando la plataforma web desarrollada bajo diferentes condiciones de procesamiento, considerando archivos de audio con variaciones en duración y características espectrales. Las pruebas se realizan empleando un banco de señales compuesto por:
+Señales sintéticas de corta duración, utilizadas para detectar errores básicos de continuidad.
+Señales musicales de duración media, utilizadas para evaluar comportamiento durante procesamiento continuo.
+Señales de larga duración, utilizadas para analizar estabilidad durante cargas prolongadas. 
+Para cada archivo evaluado se registran sus características principales:
+Duración del audio.
+Frecuencia de muestreo.
+Formato de entrada.
+Número de canales. 
+Tamaño del archivo. 
+La salida analizada corresponde al archivo Ambisonics generado por la plataforma, el cual es evaluado mediante herramientas independientes de validación encargadas de analizar sus características sin modificar el procesamiento interno del sistema. Durante esta etapa se evalúan principalmente:
+Conservación de la duración temporal.
+Continuidad de la señal.
+Presencia de discontinuidades entre bloques.
+Pérdida o repetición de muestras.
+Aparición de errores durante la conversión. 
+Procedimiento
+La evaluación de estabilidad del procesamiento se desarrolla mediante las siguientes etapas:
+Selección del banco de señales de prueba
+Se seleccionan archivos de audio con diferentes características para representar distintos escenarios de operación. El banco utilizado contempla:
+Archivos de corta duración para validar el funcionamiento inicial del procesamiento.
+Archivos de duración media para analizar comportamiento continuo.
+Archivos extensos para evaluar estabilidad bajo mayor carga computacional. 
+Cada archivo seleccionado debe contar con información registrada sobre duración, frecuencia de muestreo, formato y propósito dentro de la prueba.
+Procesamiento mediante la plataforma web
+Cada señal seleccionada es cargada en la plataforma y procesada utilizando la configuración establecida para la conversión hacia formato Ambisonics. Durante esta etapa se registra:
+Inicio del procesamiento.
+Finalización de la conversión.
+Generación correcta del archivo de salida.
+Presencia de mensajes de error durante la ejecución. 
+Los archivos generados son almacenados para su posterior análisis.
+Verificación estructural de las señales obtenidas
+Una vez generada la salida Ambisonics, se verifica que conserve las características temporales esperadas respecto a la señal de entrada. Se analiza:
+Duración total del archivo. 
+Frecuencia de muestreo.
+Número de canales generados.
+Integridad del archivo obtenido. 
+Esta etapa permite descartar errores asociados a pérdida de información durante el procesamiento.
+Análisis de continuidad temporal
+Las señales generadas son analizadas para identificar posibles alteraciones introducidas durante el procesamiento por bloques. Se evalúan características como:
+Cambios abruptos de amplitud.
+Discontinuidades entre segmentos. 
+Presencia de silencios inesperados. 
+Pérdida de muestras. 
+El análisis permite determinar si la reconstrucción de la señal mantiene continuidad temporal adecuada.
+Comparación entre diferentes condiciones de procesamiento
+Los resultados obtenidos para diferentes duraciones de audio son comparados con el objetivo de determinar si el comportamiento del sistema permanece estable ante cambios en la carga de procesamiento. Se analizan diferencias en:
+Integridad de la señal.
+Comportamiento temporal.
+Generación correcta del archivo de salida. 
+Registro de resultados
+Finalmente, los resultados obtenidos son almacenados mediante tablas y representaciones gráficas que permiten interpretar el comportamiento del sistema bajo diferentes condiciones de operación.
+Variables y métricas evaluadas
+Para determinar la estabilidad del procesamiento realizado por la plataforma se evalúan las siguientes variables:
+Conservación temporal de la señal
+Se compara la duración del audio de entrada respecto a la duración del archivo Ambisonics generado. Variables evaluadas:
+Duración de entrada.
+Duración de salida.
+Diferencia temporal entre ambas. 
+Esta variable permite identificar pérdidas o alteraciones durante la conversión.
+Integridad de la señal generada
+Se analiza la presencia de errores que puedan afectar la validez del archivo generado. Se evalúa:
+Valores inválidos (NaN o Inf). 
+Muestras faltantes.
+Errores de lectura del archivo. 
+Saturaciones inesperadas. 
+Continuidad entre bloques de procesamiento
+Se analiza la existencia de discontinuidades producidas durante la reconstrucción de la señal. Variables consideradas:
+Variaciones abruptas de amplitud. 
+Cambios instantáneos entre segmentos.
+Interrupciones temporales. 
+Comportamiento frente a diferentes duraciones
+Se evalúa la respuesta del sistema utilizando archivos con diferentes tiempos de duración. Variables:
+Duración del archivo.
+Tiempo de ejecución. 
+Resultado exitoso o fallido del procesamiento. 
+Criterios de aceptación
+La Métrica 3 se considera satisfactoria cuando la plataforma mantiene un comportamiento estable durante la conversión de archivos con diferentes características, sin introducir alteraciones que afecten la señal Ambisonics generada. Los criterios definidos son:
+Conservación temporal
+La señal de salida debe conservar la duración esperada respecto al archivo de entrada. Se cumple cuando: 
+La duración del archivo generado corresponde a la duración del archivo original.
+No existen pérdidas o repeticiones de muestras. 
+Integridad del archivo generado
+La salida obtenida no debe presentar errores que comprometan su utilización posterior. Se verifica:
+Ausencia de valores NaN.
+Ausencia de valores Inf.
+Archivo reproducible y correctamente generado. 
+Continuidad de la señal
+El procesamiento por bloques no debe generar alteraciones perceptibles o medibles en la señal. Se cumple cuando:
+No se presentan discontinuidades temporales.
+No existen cortes inesperados.
+La señal mantiene una evolución continua.
+Estabilidad ante diferentes cargas
+La plataforma debe mantener un comportamiento correcto independientemente de la duración del archivo procesado. Se cumple cuando:
+Todos los archivos seleccionados son procesados correctamente.
+No aparecen errores asociados al aumento de duración. 
+Evaluación global de la métrica
+La Métrica 3 será considerada aprobada cuando las pruebas realizadas no evidencien pérdidas de información, discontinuidades o fallos durante el procesamiento de señales con diferentes características. Los resultados serán consolidados mediante una tabla resumen donde cada variable evaluada contará con:
+Valor obtenido; 
+Condición esperada; 
+Estado de cumplimiento.
+ 
+Evidencias generadas
+Como resultado de la ejecución de la Métrica 3 se generan evidencias que permiten analizar la estabilidad del procesamiento realizado por la plataforma. Las evidencias incluyen:
+Archivos Ambisonics generados para diferentes duraciones de entrada. 
+Tablas comparativas de duración entrada/salida.
+Gráficas de continuidad temporal.
+Reportes de errores encontrados durante la conversión.
+Registro de pruebas realizadas bajo diferentes condiciones. 
+Como consolidación final se propone una tabla resumen:
+Variable evaluada
+Resultado obtenido
+Condición esperada
+Cumple
+Duración salida
+Igual a entrada
+Valores inválidos
+No presencia de NaN/Inf
+Continuidad temporal
+Sin discontinuidades
+Procesamiento archivos largos
+Conversión exitosa
+Integridad del archivo
+Archivo reproducible
+Métrica 4 — Evaluación del desempeño computacional de la plataforma
+La Métrica 4 analiza el desempeño computacional de la plataforma, determinando su capacidad de procesamiento y respuesta ante diferentes cargas de trabajo.
+Objetivo
+Evaluar el desempeño computacional de la plataforma web durante el proceso de conversión de audio estéreo multifuente a formato Ambisonics, mediante la medición del tiempo de procesamiento, consumo de recursos y capacidad de respuesta del sistema bajo diferentes condiciones de operación.
+Esta métrica busca determinar la eficiencia computacional de la implementación desarrollada y establecer la viabilidad práctica del sistema para procesar archivos de audio con diferentes características.
+Fundamentación
+El procesamiento digital de audio espacial puede requerir una cantidad considerable de recursos computacionales debido a las operaciones involucradas durante la conversión Ambisonics, procesamiento por bloques y generación de salidas multicanal.
+Por esta razón, además de validar la calidad de la señal generada, es necesario analizar el comportamiento computacional del sistema.
+Variables como tiempo de procesamiento, relación entre duración del audio y tiempo requerido para la conversión, consumo de memoria y uso del procesador permiten determinar la capacidad del sistema para responder ante diferentes cargas de trabajo.
+Esta evaluación permite identificar limitaciones de implementación y establecer si la arquitectura desarrollada presenta un desempeño adecuado para su utilización práctica.
+Configuración experimental
+La evaluación se realiza utilizando la plataforma web bajo condiciones controladas de operación. Las pruebas se ejecutan utilizando archivos con diferentes características:
+diferentes duraciones; 
+diferentes tamaños de archivo; 
+diferentes complejidades espectrales. 
+Durante cada ejecución se registran:
+características del equipo utilizado; 
+sistema operativo; 
+versión del software; 
+configuración de la plataforma; 
+características del archivo procesado. 
+Las variables computacionales son obtenidas mediante herramientas de monitoreo del sistema encargadas de registrar el comportamiento durante la ejecución.
+Procedimiento
+Selección de señales de prueba
+Se seleccionan archivos de audio con diferentes duraciones y tamaños para evaluar la respuesta del sistema ante distintas cargas. Para cada archivo se registra:
+duración; 
+tamaño; 
+frecuencia de muestreo; 
+formato. 
+Ejecución de la conversión
+Cada archivo seleccionado es procesado mediante la plataforma web utilizando la configuración definida.
+Durante la ejecución se registra:
+tiempo inicial; 
+tiempo final; 
+duración total del procesamiento; 
+resultado de la conversión. 
+Medición de recursos computacionales
+Durante cada prueba se monitorean los recursos utilizados por el sistema. Se evalúan:
+porcentaje de uso de CPU; 
+consumo de memoria RAM; 
+comportamiento durante la conversión. 
+Cálculo de indicadores de desempeño
+A partir de los datos obtenidos se calculan indicadores que permitan comparar el comportamiento del sistema. Uno de los parámetros considerados es la relación tiempo real:
+Este indicador permite determinar la relación entre el tiempo requerido por la plataforma y la duración del contenido procesado.
+ Análisis de resultados
+Los resultados obtenidos son organizados mediante tablas y gráficas para identificar tendencias relacionadas con:
+aumento de duración; 
+incremento del tamaño del archivo; 
+variación del consumo de recursos. 
+Variables y métricas evaluadas
+Tiempo de procesamiento
+Se mide el tiempo requerido por la plataforma para completar la conversión. Variables:
+Tiempo total de ejecución.
+Duración del archivo procesado. 
+Factor de tiempo real (RTF)
+Permite comparar el tiempo de procesamiento respecto a la duración del audio.
+donde:
+: tiempo de procesamiento. 
+: duración del audio. 
+Consumo computacional
+Se evalúa el uso de recursos durante la ejecución. Variables:
+Porcentaje de CPU utilizado; 
+Memoria RAM consumida. 
+Escalabilidad del sistema
+Se analiza cómo cambia el comportamiento del sistema al aumentar la duración del audio. Variables:
+Duración del archivo; 
+Tiempo de procesamiento; 
+Consumo de recursos. 
+Criterios de aceptación
+La Métrica 4 se considera satisfactoria cuando la plataforma presenta un comportamiento computacional estable y permite realizar conversiones sin afectar la correcta generación de las señales Ambisonics. Los criterios establecidos son:
+Tiempo de procesamiento
+El sistema debe completar las conversiones sin presentar tiempos excesivos que comprometan su funcionamiento.
+Relación tiempo procesamiento/duración
+El indicador RTF debe permitir determinar la eficiencia del sistema bajo diferentes condiciones de prueba.
+Uso de recursos
+El consumo de CPU y memoria debe mantenerse dentro de valores que permitan la ejecución estable del sistema.
+Capacidad de respuesta
+La plataforma debe completar correctamente las conversiones realizadas sobre archivos de diferente tamaño y duración.
+Evaluación global de la métrica
+La Métrica 4 será aprobada cuando los resultados obtenidos evidencien que la plataforma mantiene un desempeño computacional adecuado bajo las condiciones evaluadas. Los resultados serán consolidados mediante una tabla resumen:
+Variable evaluada
+Resultado obtenido
+Condición esperada
+Cumple
+Tiempo de procesamiento
+Dentro del rango esperado
+RTF
+Comportamiento estable
+CPU utilizada
+Consumo controlado
+RAM utilizada
+Sin saturación
+Escalabilidad
+Respuesta adecuada
+Evidencias generadas
+Como resultado de la ejecución de la Métrica 4 se generan evidencias que permiten analizar el desempeño computacional de la plataforma. Las evidencias incluyen:
+registros de tiempo de procesamiento; 
+tablas comparativas para diferentes archivos; 
+gráficas de tiempo de conversión respecto a duración del audio; 
+registros de consumo de CPU y memoria; 
+cálculo del indicador RTF; 
+reporte final de desempeño. 
+Como consolidación final se presenta una tabla resumen:
+Variable evaluada
+Resultado obtenido
+Condición esperada
+Cumple
+Tiempo procesamiento
+Conversión completada correctamente
+RTF
+Relación adecuada
+CPU
+Uso controlado
+RAM
+Sin saturación
+Escalabilidad
+Comportamiento estable
+Métrica 5 — Evaluación espacial mediante comparación con referencia externa (IEM)
+La Métrica 5 valida la coherencia espacial del sistema mediante comparación con herramientas de referencia
+Objetivo
+Evaluar la coherencia espacial de la señal Ambisonics generada por la plataforma mediante la comparación del comportamiento del renderizado obtenido frente a herramientas de referencia especializadas, verificando que la información espacial producida conserve características equivalentes a una implementación ampliamente utilizada en el campo del audio inmersivo.
+Esta métrica busca determinar si la representación Ambisonics generada permite una reproducción espacial adecuada al ser interpretada por herramientas externas compatibles con el formato FOA utilizado.
+Fundamentación
+La validación de un sistema Ambisonics no depende únicamente de verificar la estructura matemática de la señal generada, sino también de comprobar que dicha representación espacial pueda ser interpretada correctamente por otros sistemas de reproducción y análisis.
+Las herramientas de referencia permiten establecer un punto de comparación frente a implementaciones ampliamente utilizadas en procesamiento Ambisonics. De esta manera, se evalúa si la salida generada por la plataforma conserva la información espacial esperada al ser sometida a procesos externos de decodificación o renderizado.
+Configuración experimental
+La prueba se realiza utilizando señales Ambisonics generadas por la plataforma y señales procesadas mediante una herramienta externa de referencia.
+Se emplean señales con posiciones espaciales conocidas para comparar:
+Dirección percibida de la fuente.
+Distribución espacial de la energía.
+Correspondencia entre la posición esperada y la posición reproducida.
+Las condiciones de prueba se mantienen equivalentes entre ambas implementaciones.
+Procedimiento
+Selección de señales Ambisonics generadas por la plataforma.
+Procesamiento de las mismas señales mediante una herramienta externa de referencia.
+Aplicación del mismo método de reproducción o renderizado espacial en ambas señales.
+Comparación de la ubicación espacial obtenida.
+Registro de diferencias encontradas mediante análisis gráfico y cuantitativo.
+Variables y métricas evaluadas
+Dirección angular estimada.
+Error de localización espacial.
+Diferencia de energía por dirección.
+Correspondencia entre fuente original y fuente reproducida.
+Diferencias entre renderizado propio y referencia externa.
+Criterios de aceptación
+La métrica será satisfactoria cuando la salida generada por la plataforma presente un comportamiento espacial equivalente al obtenido mediante la herramienta de referencia. Se considera cumplimiento cuando:
+La dirección de la fuente se conserva.
+No existen desplazamientos espaciales significativos.
+La distribución energética mantiene coherencia con la referencia.
+Evidencias generadas
+Archivos Ambisonics utilizados.
+Comparaciones gráficas de ubicación espacial.
+Tablas de error angular.
+Tabla resumen de cumplimiento.

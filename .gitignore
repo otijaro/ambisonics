@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Backups and temporary files
+*.bak
+*.tmp
+*.temp
+
+# Large audio binaries (exceeding GitHub limits)
+*.wav
+
+# System / IDE
+.DS_Store
+Thumbs.db

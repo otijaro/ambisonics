@@ -188,7 +188,11 @@ scripts/
 
 │
 
-└── metrica\_4/
+├── metrica\_4/
+
+│
+
+└── metrica\_6/
 
 
 
@@ -244,7 +248,11 @@ results/
 
 │
 
-└── metrica\_4/
+├── metrica\_4/
+
+│
+
+└── metrica\_6/
 
 
 
@@ -428,7 +436,17 @@ Evaluación de continuidad y consistencia del procesamiento por bloques.
 
 
 
-Pruebas adicionales de desempeño y validación del sistema.
+Pruebas de desempeño computacional, factor de tiempo real (RTF) y escalabilidad.
+
+
+
+
+
+## Métrica 6
+
+
+
+Evaluación de la información espacial binaural mediante diferencias interaurales ITD e ILD.
 
 
 
