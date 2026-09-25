@@ -1,4 +1,4 @@
-﻿# Ambisonic Audio Processor 🎧
+﻿# Ambisonic Audio Processor 
 
 Aplicación web para el procesamiento espacial de audio utilizando tecnología Ambisonic, HRTF y un frontend interactivo en Next.js.
 
