@@ -1,0 +1,75 @@
+# ==============================================================================
+# AMBISONIC — GITIGNORE PARA DISTRIBUCIÓN PÚBLICA EN GITHUB
+# ==============================================================================
+
+# 1. Variables de entorno y secretos locales (CRÍTICO: nunca subir credenciales)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# 2. Archivos binarios pesados HRIR / SOFA (> 140 MB en total)
+# Se excluyen del historial git para mantener el repositorio ligero y sin advertencias.
+# Se instalan/verifican automáticamente con: python scripts/setup_sofa.py
+backend/sofa/*.sofa
+!backend/sofa/.gitkeep
+
+# 3. Almacenamiento temporal de audio y sesiones de usuario
+backend/static/*
+!backend/static/.gitkeep
+backend/uploads/*
+!backend/uploads/.gitkeep
+*.wav
+*.mp3
+
+# 4. Bases de datos locales SQLite o dumps de prueba
+*.db
+*.sqlite
+*.sqlite3
+ambisonic.db
+
+# 5. Dependencias y compilaciones de Node / Next.js
+node_modules/
+.next/
+out/
+build/
+dist/
+.turbo/
+*.tsbuildinfo
+next-env.d.ts
+
+# 6. Entornos virtuales y cachés de Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+*.egg-info/
+.pytest_cache/
+
+# 7. Registros, logs y archivos de depuración
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# 8. Archivos comprimidos, respaldos y volcados experimentales
+*.zip
+*.tar.gz
+*.rar
+*.7z
+*.bak
+*.bak2
+*.tmp
+
+# 9. Configuraciones de entorno de desarrollo y sistemas operativos
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*.swo
+
