@@ -26,20 +26,18 @@ Los cuadernos Jupyter sirvieron para explorar y validar el algoritmo, pero no so
 
 ```text
 ambisonics_conversor_v5.0 FINAL/
-├── backend/
-│   ├── main.py            # Servicio FastAPI: punto de entrada
-│   ├── processor.py       # Pipeline de conversión y generación de salidas
-│   ├── core_dsp.py        # Núcleo matemático DSP
-│   └── sofa/.gitkeep      # Carpeta donde se instalan las bases HRIR (.sofa)
-├── scripts/
-│   └── setup_sofa.py      # Verificación de las bases HRIR (tamaño y SHA-256)
-├── requirements.txt
-└── .gitignore             # Evita versionar los .sofa
+├── main.py                  # Servicio FastAPI: punto de entrada y rutas de conversión
+├── processor.py             # Pipeline de conversión y generación de salidas WAV/MP3
+├── core_dsp.py              # Núcleo matemático DSP (AmbiX, SAD, binaural HRTF)
+├── processing_requests.py   # Router puente de solicitudes de procesamiento y descarga
+├── setup_sofa.py            # Verificación de las bases HRIR (tamaño y SHA-256)
+├── requirements.txt         # Dependencias del motor DSP y servicio web
+├── .gitignore               # Evita versionar los .sofa
+└── sofa/
+    └── .gitkeep             # Carpeta donde se instalan las bases HRIR (.sofa)
 ```
 
-La estructura reproduce la de `web site v3.0 FINAL/` (`backend/` y `scripts/`) para que los archivos funcionen **tal cual**: usan importaciones `backend.*` y `setup_sofa.py` busca las bases en `backend/sofa/`.
-
-### `backend/main.py`: servicio y punto de entrada
+### `main.py`: servicio y punto de entrada
 Recibe las solicitudes `POST /api/convert` (y la demo `POST /api/demo`), valida el archivo y los parámetros, y entrega las salidas con `GET /api/download/{session}/{archivo}`.
 - Acepta dos modos de entrada: `stereo` (2 canales) y `tetra_4mic` (arreglo tetraédrico de 4 canales). Cualquier otro valor se trata como `stereo`.
 - Valida la frecuencia de muestreo (solo 44,1, 48 y 96 kHz).
@@ -47,12 +45,18 @@ Recibe las solicitudes `POST /api/convert` (y la demo `POST /api/demo`), valida 
 - Ejecuta la conversión bajo el semáforo `dsp_semaphore`, que limita la concurrencia.
 - Registra cada solicitud en la base de datos (`Software/Database/Database_v2.0/`).
 
-### Enrutamiento por modo de entrada
+### `processing_requests.py`: router puente de solicitudes y descargas
+Actúa como puente entre las conversiones y la capa de persistencia/usuarios (`APIRouter` bajo `/api/processing-requests`):
+- Crea y actualiza el estado de las solicitudes de procesamiento (`POST /api/processing-requests`, `PATCH /api/processing-requests/{request_id}`).
+- Lista el historial de conversiones del usuario autenticado junto con la disponibilidad de sus archivos temporales (`GET /api/processing-requests/mine`).
+- Gestiona la descarga segura por tipo de salida (`binaural`, `binaural_mp3`, `binaural_3d`, `binaural_3d_mp3`, `foa`) verificando sesión, vigencia y rutas dentro del almacenamiento temporal.
+
+### Enrutamiento DSP por modo de entrada
 No existe un `convert.py` separado en la versión web: la lógica de conversión del notebook se encuentra en `convert_audio()` de `processor.py`, que enruta según el parámetro `mode`:
 - **Estéreo:** `stereo_to_foa()` estima la dirección de las fuentes y codifica a FOA.
 - **Tetraédrico:** `tetra_aformat_to_foa()` convierte el formato A (4 cápsulas) a FOA con la matriz tetraédrica.
 
-### `backend/processor.py`: orquestación y salidas
+### `processor.py`: orquestación y salidas
 `convert_audio(input_path, output_dir, mode, hrtf, pos)`:
 - Para audios de **menos de 60 s** procesa en memoria; para audios más largos procesa por **bloques de 10 s** con Overlap-Add, conservando las colas de reverberación entre bloques.
 - Genera tres salidas WAV (16 bits):
@@ -62,7 +66,7 @@ No existe un `convert.py` separado en la versión web: la lógica de conversión
 - Transcodifica a MP3 (320 kbps, `libmp3lame`) las dos salidas binaurales mediante `ffmpeg`, **solo si la frecuencia es ≤ 48 kHz** (MP3 no admite 96 kHz; en ese caso solo se entrega el WAV nativo).
 - Devuelve la duración del audio, el tiempo total y la frecuencia usada.
 
-### `backend/core_dsp.py`: núcleo DSP
+### `core_dsp.py`: núcleo DSP
 - Parámetros de la STFT: `N_FFT = 2048` y `HOP = 512`.
 - **Codificación AmbiX ACN/SN3D** (`stereo_to_foa`, `tetra_aformat_to_foa`), con estimación direccional 3D basada en la STFT y la coherencia espectral local entre canales.
 - **Decodificación virtual** a 6 altavoces (octaedro, `GEOMETRY_B_OCTAHEDRAL_SAD_SPEAKERS`) y **renderizado binaural** (`foa_to_binaural`) mediante convolución por Overlap-Add con HRIR, interpolando las 4 direcciones más cercanas (`get_hrtf_interp`). `foa_to_binaural_fallback` se usa si no hay HRIR disponible.
@@ -72,7 +76,7 @@ No existe un `convert.py` separado en la versión web: la lógica de conversión
 
 Este módulo contiene además geometrías y funciones de demostración (`*_demo`) usadas por la demo interactiva de la web.
 
-### `backend/sofa/`: bases HRIR (SADIE II D1)
+### `sofa/`: bases HRIR (SADIE II D1)
 Las respuestas impulsionales (HRIR, formato SOFA `SimpleFreeFieldHRIR`) permiten espacializar el audio en auriculares. El motor usa un archivo por frecuencia de muestreo:
 
 | Frecuencia | Archivo | Tamaño |
@@ -88,11 +92,11 @@ Las respuestas impulsionales (HRIR, formato SOFA `SimpleFreeFieldHRIR`) permiten
 1. Descargar `D1_HRIR_SOFA.zip` de la base de datos SADIE II (University of York, licencia Apache 2.0):
    - Zenodo: https://zenodo.org/records/12092466/files/D1_HRIR_SOFA.zip?download=1
    - Proyecto: https://www.york.ac.uk/sadie-project/database.html
-2. Extraer los tres archivos `.sofa` anteriores dentro de `backend/sofa/`.
+2. Extraer los tres archivos `.sofa` anteriores dentro de `sofa/` (o en `backend/sofa/` al desplegar dentro de `Software/web site/web site v3.0 FINAL/`).
 3. Verificar tamaño e integridad (SHA-256):
 
    ```bash
-   python scripts/setup_sofa.py
+   python setup_sofa.py
    ```
 
    El script indica qué archivos faltan o no coinciden y repite las instrucciones de descarga.
@@ -103,9 +107,9 @@ Las respuestas impulsionales (HRIR, formato SOFA `SimpleFreeFieldHRIR`) permiten
 - **ffmpeg** con `libmp3lame` en el `PATH` (solo para los MP3; sin él se omiten y se entregan los WAV).
 - Dependencias: `pip install -r requirements.txt`
 
-**Uso del motor.** `main.py` forma parte del servicio completo: importa además los routers de autenticación y procesamiento, los servicios de limpieza, la base de datos y la demo, que **no se duplican aquí** y se encuentran en `Software/web site/web site v3.0 FINAL/backend/`. Para ejecutar el servicio completo se usa esa carpeta.
+**Uso del motor.** `main.py` y `processing_requests.py` forman parte del servicio completo, cuyas dependencias internas (`backend.database`, `backend.models`, `backend.schemas`, `backend.dependencies`, `backend.routers.auth`, `backend.services.cleanup`, `backend.demo_processor`) residen en `Software/web site/web site v3.0 FINAL/backend/`. Para levantar la API web completa se ejecuta desde esa carpeta.
 
-`processor.py` y `core_dsp.py` son autosuficientes: dentro de un paquete `backend/` pueden usarse directamente.
+`processor.py` y `core_dsp.py` concentran el pipeline DSP y en el entorno web operan dentro del paquete `backend/`:
 
 ```python
 from backend.core_dsp import load_sofa

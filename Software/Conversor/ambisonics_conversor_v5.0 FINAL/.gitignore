@@ -1,1 +1,9 @@
-# Las bases HRIR SADIE II D1 (35-69 MB) NO se versionan; se descargan con scripts/setup_sofa.py\nbackend/sofa/*.sofa\n!backend/sofa/.gitkeep\n\n# Salidas y cachés\n__pycache__/\n*.py[cod]\nbackend/static/*\n.env\n
+# Las bases HRIR SADIE II D1 (35-69 MB) NO se versionan; se verifican con setup_sofa.py
+sofa/*.sofa
+!sofa/.gitkeep
+
+# Salidas y cachés
+__pycache__/
+*.py[cod]
+static/*
+.env

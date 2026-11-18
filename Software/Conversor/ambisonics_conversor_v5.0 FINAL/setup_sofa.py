@@ -20,8 +20,8 @@ import os
 import sys
 import hashlib
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOFA_DIR = os.path.join(BASE_DIR, "backend", "sofa")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+SOFA_DIR = os.path.join(BASE_DIR, "sofa")
 
 EXPECTED_SOFA = {
     44100: {
