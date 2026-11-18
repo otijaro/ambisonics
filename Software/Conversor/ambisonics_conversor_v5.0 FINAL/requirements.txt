@@ -1,0 +1,23 @@
+# Dependencias del motor de conversion v5.0 FINAL (versiones tomadas de web site v3.0 FINAL).
+# Ademas se requiere ffmpeg (con libmp3lame) en el PATH del sistema para generar los MP3.
+
+# --- Nucleo DSP (core_dsp.py, processor.py) ---
+numpy==2.4.6
+scipy==1.17.1
+soundfile==0.14.0
+pysofaconventions==0.1.5
+netCDF4==1.7.4
+cftime==1.6.5
+
+# --- Servicio web (main.py) ---
+fastapi==0.139.0
+uvicorn==0.50.0
+python-multipart==0.0.32
+pydantic==2.13.4
+python-dotenv==1.2.2
+
+# --- Persistencia y autenticacion (importadas por main.py y sus routers) ---
+SQLAlchemy
+psycopg2-binary
+bcrypt
+email-validator
