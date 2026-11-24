@@ -153,14 +153,10 @@ def stabilize_loudness(y, sr,
     win = int(sr * win_ms / 1000)
     win = max(win, 1)
 
-    kernel = np.ones(win, dtype=np.float64) / win
-
-    smoothed_power = fftconvolve(power, kernel, mode="same")
+    # Suavizado de potencia O(N) equivalente a convolución rectangular uniforme
+    smoothed_power = uniform_filter1d(power, size=win, mode="constant", cval=0.0)
 
     # La potencia suavizada es matemáticamente no negativa.
-    # fftconvolve puede producir valores negativos diminutos
-    # por error de redondeo, por lo que se eliminan únicamente
-    # esos valores imposibles antes de aplicar sqrt.
     smoothed_power = np.maximum(smoothed_power, 0.0)
 
     env = np.sqrt(smoothed_power + eps)
@@ -171,7 +167,8 @@ def stabilize_loudness(y, sr,
     gain = gain ** strength
     gain = np.clip(gain, min_gain, max_gain)
 
-    gain = fftconvolve(gain, kernel, mode="same")
+    # Suavizado de ganancia O(N) idéntico
+    gain = uniform_filter1d(gain, size=win, mode="constant", cval=0.0)
     gain = np.maximum(gain, 0.0)
 
     y_out = y * gain[:, None]
@@ -244,7 +241,7 @@ def _local_magnitude_squared_coherence(ZL, ZR, sr, hop=HOP, window_ms=100.0):
     return np.clip(coherence, 0.0, 1.0)
 
 
-def stereo_to_foa(audio_stereo, sr, last_az=None, last_el=None):
+def stereo_to_foa(audio_stereo, sr, last_az=None, last_el=None, min_tilt=None, max_tilt=None, is_first_block=True):
     audio_stereo = np.asarray(audio_stereo, dtype=np.float32)
     if audio_stereo.ndim != 2 or audio_stereo.shape[1] < 2:
         raise ValueError("El modo estéreo requiere un audio de mínimo 2 canales: L y R.")
@@ -292,7 +289,9 @@ def stereo_to_foa(audio_stereo, sr, last_az=None, last_el=None):
     ild_hf = np.clip(ild_hf, 0.0, 1.0)
 
     spectral_tilt = np.sum(E * f[:, None], axis=0) / (np.sum(E, axis=0) + eps)
-    spectral_tilt = (spectral_tilt - np.min(spectral_tilt)) / (np.max(spectral_tilt) - np.min(spectral_tilt) + eps)
+    _min = min_tilt if min_tilt is not None else np.min(spectral_tilt)
+    _max = max_tilt if max_tilt is not None else np.max(spectral_tilt)
+    spectral_tilt = (spectral_tilt - _min) / (_max - _min + eps)
     spectral_tilt = np.clip(spectral_tilt, 0.0, 1.0)
 
     z_conf = (0.4 * spectral_tilt + 0.3 * diffuse_hf + 0.3 * ild_hf)
@@ -308,7 +307,7 @@ def stereo_to_foa(audio_stereo, sr, last_az=None, last_el=None):
     for k in range(1, len(el_frame)):
         el_frame[k] = ALPHA_EL * el_frame[k - 1] + (1 - ALPHA_EL) * el_frame[k]
 
-    if len(el_frame) > 20 and last_el is None:
+    if len(el_frame) > 20 and (last_el is None and is_first_block):
         el_frame[:20] = el_frame[20]
 
     el = np.tile(el_frame[None, :], (len(f), 1))
